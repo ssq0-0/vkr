@@ -1,0 +1,61 @@
+# Build directories
+/processor-cpp/build/
+/processor-cpp/build-diplom-check/
+/gateway/bin/
+/processor-go/bin/
+
+# Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+go.work
+
+# C++
+*.o
+*.a
+*.lib
+*.obj
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Docker
+.docker/
+
+# Generated files (C++ build artifacts)
+*.pb.cc
+*.pb.h
+*.grpc.pb.cc
+*.grpc.pb.h
+
+# Go protobuf stubs needed for gateway build (committed)
+!gateway/proto/*.pb.go
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.local
+
+# Prometheus/Grafana data
+prometheus-data/
+grafana-data/
+
+# Test coverage
+coverage.out
+coverage.html
+
+# Vendor (if using)
+vendor/
+
+

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔬 Runtime Monitor - Choose Processor</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: #0d1117;
+            color: #c9d1d9;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container { text-align: center; }
+        h1 { font-size: 2.5rem; margin-bottom: 20px; }
+        p { color: #8b949e; margin-bottom: 40px; }
+        .cards { display: flex; gap: 30px; }
+        .card {
+            width: 300px;
+            padding: 40px;
+            border-radius: 16px;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .card:hover { transform: translateY(-5px); }
+        .card.go {
+            background: linear-gradient(135deg, #238636, #3fb950);
+            color: #fff;
+        }
+        .card.cpp {
+            background: linear-gradient(135deg, #1f6feb, #58a6ff);
+            color: #fff;
+        }
+        .card h2 { font-size: 3rem; margin-bottom: 10px; }
+        .card h3 { font-size: 1.3rem; margin-bottom: 15px; }
+        .card ul { text-align: left; font-size: 0.85rem; list-style: none; }
+        .card li { padding: 5px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔬 Runtime Monitor</h1>
+        <p>Выберите процессор для мониторинга</p>
+        
+        <div class="cards">
+            <a href="runtime-go.html" class="card go">
+                <h2>🐹</h2>
+                <h3>Go + sync.Pool</h3>
+                <ul>
+                    <li>♻️ Garbage Collector</li>
+                    <li>🔄 sync.Pool reuse</li>
+                    <li>📊 GC паузы</li>
+                    <li>🧠 Heap метрики</li>
+                </ul>
+            </a>
+            
+            <a href="runtime-cpp.html" class="card cpp">
+                <h2>⚡</h2>
+                <h3>C++ + Memory Arena</h3>
+                <ul>
+                    <li>🚫 Нет GC!</li>
+                    <li>⚡ Zero pauses</li>
+                    <li>🏗️ Arena allocator</li>
+                    <li>📈 Предсказуемость</li>
+                </ul>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

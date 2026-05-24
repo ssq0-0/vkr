@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎬 Video Streaming Processor Demo - Go vs C++ Comparison</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #00ff88, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .video-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .video-box {
+            background: rgba(0,0,0,0.5);
+            border: 2px solid #333;
+            border-radius: 12px;
+            padding: 15px;
+            position: relative;
+        }
+        
+        .video-box.original {
+            border-color: #00ff88;
+        }
+        
+        .video-box.processed {
+            border-color: #00d4ff;
+        }
+        
+        .video-box h3 {
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #0a0a0f;
+            padding: 0 10px;
+            font-size: 0.9rem;
+        }
+        
+        .original h3 { color: #00ff88; }
+        .processed h3 { color: #00d4ff; }
+        
+        video, canvas {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            background: #000;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            padding: 12px 24px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn-start {
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            color: #000;
+        }
+        
+        .btn-stop {
+            background: linear-gradient(135deg, #ff4444, #cc0000);
+            color: #fff;
+        }
+        
+        .btn-filter {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            border: 1px solid #444;
+        }
+        
+        .btn-filter.active {
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            color: #000;
+            border-color: #00d4ff;
+        }
+        
+        select {
+            padding: 12px 20px;
+            font-size: 1rem;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            border: 1px solid #444;
+            font-family: inherit;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .stat-box {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #00d4ff;
+        }
+        
+        .stat-label {
+            font-size: 0.75rem;
+            color: #888;
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+        
+        .status {
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .status.connected {
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+        }
+        
+        .status.disconnected {
+            background: rgba(255, 68, 68, 0.2);
+            color: #ff4444;
+        }
+        
+        .status.processing {
+            background: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+        }
+        
+        .hidden-video {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .video-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎬 Video Streaming Processor</h1>
+        <p class="subtitle">Real-time video processing with gRPC + Memory Arena</p>
+        
+        <div id="status" class="status disconnected">⚪ Отключено</div>
+        
+        <div class="controls">
+            <button id="startBtn" class="btn-start" onclick="startProcessing()">▶ Запустить камеру</button>
+            <button id="stopBtn" class="btn-stop" onclick="stopProcessing()" disabled>■ Остановить</button>
+            
+            <select id="filterSelect" onchange="changeFilter()">
+                <option value="gaussian_blur">🌫 Размытие (Gaussian)</option>
+                <option value="sharpen">🔪 Резкость</option>
+                <option value="edge_detect">📐 Границы (Sobel)</option>
+                <option value="grayscale">⬛ Ч/Б</option>
+            </select>
+            
+            <select id="qualitySelect" onchange="changeQuality()">
+                <option value="320x240">320×240 (быстро)</option>
+                <option value="640x480" selected>640×480 (норма)</option>
+                <option value="1280x720">1280×720 (HD)</option>
+            </select>
+        </div>
+        
+        <div class="video-container">
+            <div class="video-box original">
+                <h3>📹 Оригинал</h3>
+                <video id="originalVideo" autoplay playsinline muted></video>
+            </div>
+            <div class="video-box processed">
+                <h3>✨ Обработано</h3>
+                <canvas id="processedCanvas"></canvas>
+            </div>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-value" id="fps">0</div>
+                <div class="stat-label">FPS</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="latency">0</div>
+                <div class="stat-label">Latency (ms)</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="framesSent">0</div>
+                <div class="stat-label">Кадров отправлено</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="framesReceived">0</div>
+                <div class="stat-label">Кадров получено</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="dataRate">0</div>
+                <div class="stat-label">MB/сек</div>
+            </div>
+        </div>
+    </div>
+    
+    <canvas id="captureCanvas" class="hidden-video"></canvas>
+    
+    <script>
+        let video = document.getElementById('originalVideo');
+        let captureCanvas = document.getElementById('captureCanvas');
+        let processedCanvas = document.getElementById('processedCanvas');
+        let captureCtx = captureCanvas.getContext('2d');
+        let processedCtx = processedCanvas.getContext('2d');
+        
+        let ws = null;
+        let stream = null;
+        let processing = false;
+        let frameInterval = null;
+        
+        let currentFilter = 'gaussian_blur';
+        let width = 640;
+        let height = 480;
+        
+        // Статистика
+        let stats = {
+            framesSent: 0,
+            framesReceived: 0,
+            latencies: [],
+            lastSecondFrames: 0,
+            totalBytes: 0,
+            startTime: 0
+        };
+        
+        function updateStatus(status, text) {
+            const el = document.getElementById('status');
+            el.className = 'status ' + status;
+            el.textContent = text;
+        }
+        
+        function changeFilter() {
+            currentFilter = document.getElementById('filterSelect').value;
+        }
+        
+        function changeQuality() {
+            const quality = document.getElementById('qualitySelect').value;
+            const [w, h] = quality.split('x').map(Number);
+            width = w;
+            height = h;
+            captureCanvas.width = width;
+            captureCanvas.height = height;
+            processedCanvas.width = width;
+            processedCanvas.height = height;
+        }
+        
+        async function startProcessing() {
+            try {
+                // Получаем доступ к камере
+                stream = await navigator.mediaDevices.getUserMedia({
+                    video: { width: { ideal: width }, height: { ideal: height } }
+                });
+                video.srcObject = stream;
+                
+                // Настраиваем canvas
+                captureCanvas.width = width;
+                captureCanvas.height = height;
+                processedCanvas.width = width;
+                processedCanvas.height = height;
+                
+                // Подключаемся к WebSocket
+                ws = new WebSocket('ws://localhost:8080/ws');
+                
+                ws.onopen = () => {
+                    updateStatus('connected', '🟢 Подключено к серверу');
+                    processing = true;
+                    stats.startTime = Date.now();
+                    document.getElementById('startBtn').disabled = true;
+                    document.getElementById('stopBtn').disabled = false;
+                    
+                    // Начинаем отправлять кадры
+                    frameInterval = setInterval(captureAndSend, 100); // 10 fps
+                    
+                    // Обновляем статистику
+                    setInterval(updateStats, 1000);
+                };
+                
+                ws.onmessage = (event) => {
+                    const response = JSON.parse(event.data);
+                    
+                    if (response.error) {
+                        console.error('Error:', response.error);
+                        return;
+                    }
+                    
+                    stats.framesReceived++;
+                    stats.latencies.push(response.processing_time_ms);
+                    if (stats.latencies.length > 30) stats.latencies.shift();
+                    
+                    // Декодируем и отображаем
+                    const imageData = base64ToImageData(response.data, width, height);
+                    processedCtx.putImageData(imageData, 0, 0);
+                };
+                
+                ws.onerror = (error) => {
+                    console.error('WebSocket error:', error);
+                    updateStatus('disconnected', '🔴 Ошибка соединения');
+                };
+                
+                ws.onclose = () => {
+                    updateStatus('disconnected', '⚪ Отключено');
+                    stopProcessing();
+                };
+                
+            } catch (error) {
+                console.error('Error starting:', error);
+                updateStatus('disconnected', '🔴 Ошибка: ' + error.message);
+            }
+        }
+        
+        function stopProcessing() {
+            processing = false;
+            
+            if (frameInterval) {
+                clearInterval(frameInterval);
+                frameInterval = null;
+            }
+            
+            if (ws) {
+                ws.close();
+                ws = null;
+            }
+            
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+            }
+            
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('stopBtn').disabled = true;
+            updateStatus('disconnected', '⚪ Остановлено');
+        }
+        
+        function captureAndSend() {
+            if (!processing || !ws || ws.readyState !== WebSocket.OPEN) return;
+            
+            // Захватываем кадр
+            captureCtx.drawImage(video, 0, 0, width, height);
+            const imageData = captureCtx.getImageData(0, 0, width, height);
+            
+            // Конвертируем RGBA в RGB
+            const rgbData = new Uint8Array(width * height * 3);
+            for (let i = 0, j = 0; i < imageData.data.length; i += 4, j += 3) {
+                rgbData[j] = imageData.data[i];       // R
+                rgbData[j + 1] = imageData.data[i + 1]; // G
+                rgbData[j + 2] = imageData.data[i + 2]; // B
+            }
+            
+            // Кодируем в base64
+            const base64 = uint8ArrayToBase64(rgbData);
+            
+            // Отправляем
+            const request = {
+                data: base64,
+                width: width,
+                height: height,
+                filter: currentFilter,
+                blur_radius: 5.0
+            };
+            
+            ws.send(JSON.stringify(request));
+            stats.framesSent++;
+            stats.totalBytes += rgbData.length;
+        }
+        
+        function uint8ArrayToBase64(bytes) {
+            let binary = '';
+            for (let i = 0; i < bytes.length; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            return btoa(binary);
+        }
+        
+        function base64ToImageData(base64, width, height) {
+            const binary = atob(base64);
+            const len = width * height * 3;
+            const imageData = processedCtx.createImageData(width, height);
+            
+            for (let i = 0, j = 0; i < len && j < imageData.data.length; i += 3, j += 4) {
+                imageData.data[j] = binary.charCodeAt(i);       // R
+                imageData.data[j + 1] = binary.charCodeAt(i + 1); // G
+                imageData.data[j + 2] = binary.charCodeAt(i + 2); // B
+                imageData.data[j + 3] = 255;                     // A
+            }
+            
+            return imageData;
+        }
+        
+        function updateStats() {
+            const elapsed = (Date.now() - stats.startTime) / 1000;
+            
+            // FPS
+            const fps = stats.framesReceived / elapsed;
+            document.getElementById('fps').textContent = fps.toFixed(1);
+            
+            // Latency
+            if (stats.latencies.length > 0) {
+                const avgLatency = stats.latencies.reduce((a, b) => a + b) / stats.latencies.length;
+                document.getElementById('latency').textContent = avgLatency.toFixed(0);
+            }
+            
+            // Frames
+            document.getElementById('framesSent').textContent = stats.framesSent;
+            document.getElementById('framesReceived').textContent = stats.framesReceived;
+            
+            // Data rate
+            const mbPerSec = (stats.totalBytes / elapsed) / 1024 / 1024;
+            document.getElementById('dataRate').textContent = mbPerSec.toFixed(1);
+        }
+    </script>
+</body>
+</html>
+

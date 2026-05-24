@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐹 Go Runtime Monitor - sync.Pool & GC</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'JetBrains Mono', 'SF Mono', monospace;
+            background: #0d1117;
+            color: #c9d1d9;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .header { text-align: center; margin-bottom: 30px; }
+        
+        h1 {
+            font-size: 2rem;
+            background: linear-gradient(90deg, #3fb950, #238636);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .status-line {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 10px;
+            font-size: 0.85rem;
+        }
+        
+        .status-item { display: flex; align-items: center; gap: 8px; }
+        
+        .dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: #f85149;
+        }
+        
+        .dot.online { background: #3fb950; animation: pulse 2s infinite; }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: #161b22;
+            border: 1px solid #3fb950;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #30363d;
+            color: #3fb950;
+        }
+        
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(48, 54, 61, 0.5);
+        }
+        
+        .metric-label { color: #8b949e; font-size: 0.85rem; }
+        .metric-value { font-weight: 600; }
+        .metric-value.good { color: #3fb950; }
+        .metric-value.warn { color: #f0883e; }
+        .metric-value.info { color: #58a6ff; }
+        
+        .bar {
+            height: 24px;
+            background: #21262d;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        
+        .bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3fb950, #238636);
+            transition: width 0.3s;
+        }
+        
+        .chart-container {
+            height: 120px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            margin-top: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .chart-container canvas {
+            width: 100% !important;
+            height: 100% !important;
+            display: block;
+        }
+        
+        .chart-label {
+            position: absolute;
+            top: 5px; left: 10px;
+            font-size: 0.7rem;
+            color: #8b949e;
+            z-index: 1;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            padding: 10px 20px;
+            border: 1px solid #3fb950;
+            border-radius: 8px;
+            background: #21262d;
+            color: #3fb950;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        
+        button:hover { background: #3fb950; color: #000; }
+        
+        .error-box {
+            background: rgba(248, 81, 73, 0.1);
+            border: 1px solid #f85149;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            color: #f85149;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🐹 Go Runtime Monitor</h1>
+        <p style="color: #8b949e;">sync.Pool + Garbage Collector</p>
+        <div class="status-line">
+            <div class="status-item">
+                <div class="dot" id="status"></div>
+                <span id="statusText">Connecting...</span>
+            </div>
+            <span id="uptimeDisplay">Uptime: --</span>
+        </div>
+    </div>
+    
+    <div class="controls">
+        <button onclick="runStressTest()">⚡ Stress Test</button>
+        <a href="runtime-cpp.html"><button style="border-color: #58a6ff; color: #58a6ff;">→ C++ Monitor</button></a>
+    </div>
+    
+    <div id="errorBox" class="error-box">
+        ❌ Go процессор не запущен!<br>
+        Запустите: <code>./processor-go/bin/processor --port=9090 --metrics-port=9091</code>
+    </div>
+    
+    <div class="grid">
+        <div class="card">
+            <div class="card-header">🧠 MEMORY (Heap)</div>
+            <div class="metric-row">
+                <span class="metric-label">Heap Allocated</span>
+                <span class="metric-value info" id="heapAlloc">--</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Heap System</span>
+                <span class="metric-value" id="heapSys">--</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Heap Objects</span>
+                <span class="metric-value" id="heapObjects">--</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Stack In-Use</span>
+                <span class="metric-value" id="stackInuse">--</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Total Allocated</span>
+                <span class="metric-value warn" id="totalAlloc">--</span>
+            </div>
+            <div class="bar"><div class="bar-fill" id="heapBar" style="width:0%"></div></div>
+            <div class="chart-container">
+                <span class="chart-label">Memory History</span>
+                <canvas id="memoryChart" width="100%" height="100%"></canvas>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">♻️ GARBAGE COLLECTOR</div>
+            <div class="metric-row">
+                <span class="metric-label">GC Cycles</span>
+                <span class="metric-value warn" id="numGC">--</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Total Pause Time</span>
+                <span class="metric-value warn" id="pauseTotal">--</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Last GC Pause</span>
+                <span class="metric-value" id="lastPause">--</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Next GC Target</span>
+                <span class="metric-value" id="nextGC">--</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">GC CPU %</span>
+                <span class="metric-value warn" id="gcCPU">--</span>
+            </div>
+            <div class="chart-container">
+                <span class="chart-label">GC Pauses (µs)</span>
+                <canvas id="gcChart" width="100%" height="100%"></canvas>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">🔄 sync.Pool</div>
+            <div class="metric-row">
+                <span class="metric-label">Pool Gets</span>
+                <span class="metric-value info" id="poolGets">--</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Pool Puts</span>
+                <span class="metric-value" id="poolPuts">--</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Reuse Ratio</span>
+                <span class="metric-value good" id="reuseRatio">--</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Goroutines</span>
+                <span class="metric-value" id="goroutines">--</span>
+            </div>
+            <div class="bar"><div class="bar-fill" id="poolBar" style="width:0%"></div></div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">⚡ PROCESSING</div>
+            <div class="metric-row">
+                <span class="metric-label">Total Frames</span>
+                <span class="metric-value info" id="totalFrames">--</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">FPS</span>
+                <span class="metric-value good" id="fps">--</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Avg Latency</span>
+                <span class="metric-value" id="avgLatency">--</span>
+            </div>
+            <div class="chart-container">
+                <span class="chart-label">FPS History</span>
+                <canvas id="fpsChart" width="100%" height="100%"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const RUNTIME_URL = 'http://localhost:9091/runtime';
+        const GATEWAY_URL = 'http://localhost:8080';
+        
+        const memoryHistory = [], gcHistory = [], fpsHistory = [];
+        let prevNumGC = 0;
+        
+        function formatBytes(b) {
+            if (b < 1024) return b + ' B';
+            if (b < 1024*1024) return (b/1024).toFixed(1) + ' KB';
+            return (b/1024/1024).toFixed(2) + ' MB';
+        }
+        
+        async function fetchRuntime() {
+            try {
+                const resp = await fetch(RUNTIME_URL);
+                if (!resp.ok) throw new Error('Not OK');
+                const data = await resp.json();
+                
+                document.getElementById('status').classList.add('online');
+                document.getElementById('statusText').textContent = 'Connected';
+                document.getElementById('errorBox').style.display = 'none';
+                
+                // Memory
+                document.getElementById('heapAlloc').textContent = formatBytes(data.memory.heap_alloc_bytes);
+                document.getElementById('heapSys').textContent = formatBytes(data.memory.heap_sys_bytes);
+                document.getElementById('heapObjects').textContent = data.memory.heap_objects.toLocaleString();
+                document.getElementById('stackInuse').textContent = formatBytes(data.memory.stack_inuse_bytes);
+                document.getElementById('totalAlloc').textContent = formatBytes(data.memory.total_alloc_bytes);
+                
+                const heapPct = (data.memory.heap_alloc_bytes / data.memory.heap_sys_bytes * 100).toFixed(0);
+                document.getElementById('heapBar').style.width = heapPct + '%';
+                
+                // GC
+                document.getElementById('numGC').textContent = data.gc.num_gc;
+                document.getElementById('pauseTotal').textContent = (data.gc.pause_total_ns / 1e6).toFixed(2) + ' ms';
+                document.getElementById('lastPause').textContent = (data.gc.last_pause_ns / 1e3).toFixed(0) + ' µs';
+                document.getElementById('nextGC').textContent = formatBytes(data.gc.next_gc_bytes);
+                document.getElementById('gcCPU').textContent = (data.gc.gc_cpu_percent * 100).toFixed(3) + '%';
+                
+                // Pool
+                document.getElementById('poolGets').textContent = data.pool.gets.toLocaleString();
+                document.getElementById('poolPuts').textContent = data.pool.puts.toLocaleString();
+                document.getElementById('reuseRatio').textContent = (data.pool.reuse_ratio * 100).toFixed(0) + '%';
+                document.getElementById('goroutines').textContent = data.process.goroutines;
+                document.getElementById('poolBar').style.width = (data.pool.reuse_ratio * 100) + '%';
+                
+                // Processing
+                document.getElementById('totalFrames').textContent = data.processing.total_frames.toLocaleString();
+                document.getElementById('fps').textContent = data.processing.fps.toFixed(1);
+                document.getElementById('avgLatency').textContent = data.processing.avg_latency_ms.toFixed(2) + ' ms';
+                document.getElementById('uptimeDisplay').textContent = 'Uptime: ' + data.process.uptime_seconds.toFixed(0) + 's';
+                
+                // History
+                memoryHistory.push(data.memory.heap_alloc_bytes / 1024 / 1024);
+                if (memoryHistory.length > 60) memoryHistory.shift();
+                
+                if (data.gc.num_gc > prevNumGC) {
+                    gcHistory.push(data.gc.last_pause_ns / 1e3);
+                    if (gcHistory.length > 30) gcHistory.shift();
+                    prevNumGC = data.gc.num_gc;
+                }
+                
+                fpsHistory.push(data.processing.fps);
+                if (fpsHistory.length > 60) fpsHistory.shift();
+                
+                drawChart('memoryChart', memoryHistory, '#3fb950');
+                drawChart('gcChart', gcHistory, '#f0883e');
+                drawChart('fpsChart', fpsHistory, '#58a6ff');
+                
+            } catch (e) {
+                document.getElementById('status').classList.remove('online');
+                document.getElementById('statusText').textContent = 'Disconnected';
+                document.getElementById('errorBox').style.display = 'block';
+            }
+        }
+        
+        function drawChart(id, data, color) {
+            const canvas = document.getElementById(id);
+            const container = canvas.parentElement;
+            const ctx = canvas.getContext('2d');
+            
+            const w = container.clientWidth || 300;
+            const h = container.clientHeight || 120;
+            
+            canvas.width = w;
+            canvas.height = h;
+            
+            ctx.clearRect(0, 0, w, h);
+            
+            if (data.length < 2) return;
+            
+            const max = Math.max(...data) * 1.1 || 1;
+            const padding = 5;
+            
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            
+            data.forEach((v, i) => {
+                const x = padding + (i / (data.length - 1)) * (w - padding * 2);
+                const y = h - padding - (v / max) * (h - padding * 2);
+                i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+            });
+            ctx.stroke();
+            
+            // Fill under line
+            ctx.lineTo(w - padding, h - padding);
+            ctx.lineTo(padding, h - padding);
+            ctx.closePath();
+            ctx.fillStyle = color + '20';
+            ctx.fill();
+            
+            // Value label
+            ctx.fillStyle = '#fff';
+            ctx.font = '11px monospace';
+            ctx.textAlign = 'right';
+            ctx.fillText(data[data.length-1].toFixed(1), w - 8, 18);
+        }
+        
+        async function runStressTest() {
+            const data = btoa(String.fromCharCode(...new Uint8Array(640*480*3).map(() => Math.random()*256|0)));
+            for (let i = 0; i < 50; i++) {
+                fetch(`${GATEWAY_URL}/process`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({data, width: 640, height: 480, filter: 'gaussian_blur', blur_radius: 5})
+                }).catch(() => {});
+            }
+        }
+        
+        setInterval(fetchRuntime, 500);
+        fetchRuntime();
+    </script>
+</body>
+</html>
+

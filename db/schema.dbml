@@ -1,0 +1,55 @@
+// Схема для https://dbdiagram.io/d — синхронизирована с schema.sql
+
+Project streaming_system {
+  database_type: 'PostgreSQL'
+}
+
+Table users as "Пользователь" {
+  id bigserial [pk]
+  username text [unique, not null]
+  password_hash text [not null]
+  created_at timestamptz [not null, default: `now()`]
+}
+
+Table auth_sessions as "Сессия авторизации" {
+  id bigserial [pk]
+  user_id bigint [not null]
+  token_hash text [not null]
+  expires_at timestamptz [not null]
+  created_at timestamptz [not null, default: `now()`]
+}
+
+Table processing_runs as "Запуск обработки" {
+  id bigserial [pk]
+  user_id bigint [not null]
+  memory_mode varchar [not null, note: 'arena | no_arena']
+  filter_name text [not null]
+  width int [not null]
+  height int [not null]
+  frames_count int [not null, default: 1]
+  success boolean [not null]
+  processing_time_ms double [not null]
+  error_message text
+  created_at timestamptz [not null, default: `now()`]
+}
+
+Table experiment_results as "Результат эксперимента" {
+  id bigserial [pk]
+  user_id bigint
+  memory_mode varchar [not null, note: 'arena | no_arena']
+  filter_name text [not null]
+  requests_count int [not null]
+  concurrency int [not null]
+  rps double [not null]
+  avg_latency_ms double [not null]
+  p50_latency_ms double [not null]
+  p95_latency_ms double [not null]
+  p99_latency_ms double [not null]
+  success_rate double [not null]
+  notes text
+  created_at timestamptz [not null, default: `now()`]
+}
+
+Ref: auth_sessions.user_id > users.id [delete: cascade]
+Ref: processing_runs.user_id > users.id [delete: cascade]
+Ref: experiment_results.user_id > users.id [delete: set null]

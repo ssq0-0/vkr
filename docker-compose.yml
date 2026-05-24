@@ -1,0 +1,107 @@
+version: '3.8'
+
+services:
+  # Gateway Service (Go)
+  gateway:
+    build:
+      context: .
+      dockerfile: gateway/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - HTTP_PORT=8080
+      - PROCESSOR_ADDRS=${PROCESSOR_ADDRS:-processor-cpp:9090}
+      - DATABASE_URL=postgres://streaming:streaming@postgres:5432/streaming?sslmode=disable
+      - AUTH_SECRET=${AUTH_SECRET:-diplom-local-secret}
+    depends_on:
+      - processor-cpp
+      - postgres
+    networks:
+      - streaming-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # Processor Service (C++ with Memory Arena)
+  processor-cpp:
+    build:
+      context: .
+      dockerfile: processor-cpp/Dockerfile
+    ports:
+      - "9090:9090"
+      - "9091:9091"
+    environment:
+      - HOST=0.0.0.0
+      - PORT=9090
+      - METRICS_PORT=9091
+    networks:
+      - streaming-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 512M
+
+  postgres:
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=streaming
+      - POSTGRES_USER=streaming
+      - POSTGRES_PASSWORD=streaming
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - streaming-network
+    restart: unless-stopped
+
+  # Prometheus для сбора метрик
+  prometheus:
+    image: prom/prometheus:v2.48.0
+    ports:
+      - "9099:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.enable-lifecycle'
+    networks:
+      - streaming-network
+    restart: unless-stopped
+
+  # Grafana для визуализации
+  grafana:
+    image: grafana/grafana:10.2.2
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+      - grafana-data:/var/lib/grafana
+    depends_on:
+      - prometheus
+    networks:
+      - streaming-network
+    restart: unless-stopped
+
+networks:
+  streaming-network:
+    driver: bridge
+
+volumes:
+  prometheus-data:
+  grafana-data:
+  postgres-data:
+
+

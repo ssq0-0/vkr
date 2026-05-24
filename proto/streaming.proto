@@ -1,0 +1,89 @@
+syntax = "proto3";
+
+package streaming;
+
+option go_package = "github.com/streaming-system/proto";
+
+// Сервис потоковой обработки мультимедийных данных
+service StreamingProcessor {
+  // Bidirectional streaming для обработки медиа-потока
+  rpc ProcessMediaStream(stream MediaChunk) returns (stream ProcessedChunk);
+  
+  // Получение статистики сервера
+  rpc GetStats(StatsRequest) returns (StatsResponse);
+}
+
+// Входящий чанк медиа-данных
+message MediaChunk {
+  bytes data = 1;           // Сырые данные кадра (RGB)
+  MediaType type = 2;       // Тип медиа-данных
+  int32 width = 3;          // Ширина кадра (для видео/изображений)
+  int32 height = 4;         // Высота кадра (для видео/изображений)
+  string codec = 5;         // Кодек (raw, h264, и т.д.)
+  int64 sequence_id = 6;    // Порядковый номер кадра
+  int64 timestamp_ns = 7;   // Временная метка в наносекундах
+  
+  // Параметры обработки
+  ProcessingParams params = 8;
+}
+
+// Параметры обработки
+message ProcessingParams {
+  FilterType filter = 1;     // Тип фильтра
+  float blur_radius = 2;     // Радиус размытия (для Gaussian blur)
+  float intensity = 3;       // Интенсивность эффекта
+}
+
+// Обработанный чанк
+message ProcessedChunk {
+  bytes data = 1;                  // Обработанные данные
+  bool success = 2;                // Успешность обработки
+  int64 processing_time_ns = 3;    // Время обработки в наносекундах
+  int64 sequence_id = 4;           // Порядковый номер (для соответствия)
+  string error_message = 5;        // Сообщение об ошибке (если есть)
+  
+  // Метрики памяти
+  MemoryMetrics memory_metrics = 6;
+}
+
+// Метрики использования памяти
+message MemoryMetrics {
+  int64 arena_allocated_bytes = 1;   // Выделено из Arena
+  int64 arena_used_bytes = 2;        // Используется из Arena
+  int64 total_allocations = 3;       // Всего аллокаций
+  int64 heap_used_bytes = 4;         // Используется heap памяти
+}
+
+// Типы медиа-данных
+enum MediaType {
+  MEDIA_TYPE_UNSPECIFIED = 0;
+  MEDIA_TYPE_VIDEO = 1;
+  MEDIA_TYPE_AUDIO = 2;
+  MEDIA_TYPE_IMAGE = 3;
+}
+
+// Типы фильтров
+enum FilterType {
+  FILTER_TYPE_UNSPECIFIED = 0;
+  FILTER_TYPE_GAUSSIAN_BLUR = 1;
+  FILTER_TYPE_SHARPEN = 2;
+  FILTER_TYPE_EDGE_DETECT = 3;
+  FILTER_TYPE_GRAYSCALE = 4;
+}
+
+// Запрос статистики
+message StatsRequest {}
+
+// Ответ со статистикой
+message StatsResponse {
+  int64 total_frames_processed = 1;
+  int64 total_processing_time_ns = 2;
+  double avg_processing_time_ms = 3;
+  int64 current_arena_size_bytes = 4;
+  int64 peak_arena_size_bytes = 5;
+  int64 total_arena_allocations = 6;
+  int64 total_arena_resets = 7;
+  double frames_per_second = 8;
+}
+
+

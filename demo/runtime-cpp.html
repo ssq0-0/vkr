@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ C++ Runtime Monitor - Memory Arena</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'JetBrains Mono', 'SF Mono', monospace;
+            background: #0d1117;
+            color: #c9d1d9;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .header { text-align: center; margin-bottom: 30px; }
+        
+        h1 {
+            font-size: 2rem;
+            background: linear-gradient(90deg, #58a6ff, #1f6feb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .status-line {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 10px;
+            font-size: 0.85rem;
+        }
+        
+        .status-item { display: flex; align-items: center; gap: 8px; }
+        
+        .dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: #f85149;
+        }
+        
+        .dot.online { background: #58a6ff; animation: pulse 2s infinite; }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: #161b22;
+            border: 1px solid #58a6ff;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #30363d;
+            color: #58a6ff;
+        }
+        
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(48, 54, 61, 0.5);
+        }
+        
+        .metric-label { color: #8b949e; font-size: 0.85rem; }
+        .metric-value { font-weight: 600; }
+        .metric-value.good { color: #3fb950; }
+        .metric-value.info { color: #58a6ff; }
+        .metric-value.highlight { color: #f0883e; }
+        
+        .bar {
+            height: 24px;
+            background: #21262d;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        
+        .bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #58a6ff, #1f6feb);
+            transition: width 0.3s;
+        }
+        
+        .chart-container {
+            height: 120px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            margin-top: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .chart-container canvas {
+            width: 100% !important;
+            height: 100% !important;
+            display: block;
+        }
+        
+        .chart-label {
+            position: absolute;
+            top: 5px; left: 10px;
+            font-size: 0.7rem;
+            color: #8b949e;
+            z-index: 1;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            padding: 10px 20px;
+            border: 1px solid #58a6ff;
+            border-radius: 8px;
+            background: #21262d;
+            color: #58a6ff;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        
+        button:hover { background: #58a6ff; color: #000; }
+        
+        .highlight-box {
+            background: rgba(63, 185, 80, 0.1);
+            border: 1px solid #3fb950;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            margin-top: 15px;
+            color: #3fb950;
+        }
+        
+        .error-box {
+            background: rgba(248, 81, 73, 0.1);
+            border: 1px solid #f85149;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            color: #f85149;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>⚡ C++ Runtime Monitor</h1>
+        <p style="color: #8b949e;">Memory Arena - Zero GC</p>
+        <div class="status-line">
+            <div class="status-item">
+                <div class="dot" id="status"></div>
+                <span id="statusText">Connecting...</span>
+            </div>
+            <span id="uptimeDisplay">Uptime: --</span>
+        </div>
+    </div>
+    
+    <div class="controls">
+        <button onclick="runStressTest()">⚡ Stress Test</button>
+        <button onclick="clearHistory()" style="border-color: #f0883e; color: #f0883e;">🗑️ Очистить историю</button>
+        <a href="runtime-go.html"><button style="border-color: #3fb950; color: #3fb950;">→ Go Monitor</button></a>
+    </div>
+    
+    <div id="errorBox" class="error-box">
+        ❌ C++ процессор не запущен!<br>
+        Запустите: <code>./processor-cpp/build/processor_server --port=9090</code>
+    </div>
+    
+    <div class="grid">
+        <div class="card">
+            <div class="card-header">🧠 MEMORY ARENA</div>
+            <div class="metric-row">
+                <span class="metric-label">Arena Used</span>
+                <span class="metric-value info" id="arenaUsed">--</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Arena Peak</span>
+                <span class="metric-value" id="arenaPeak">--</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Total Allocations</span>
+                <span class="metric-value" id="totalAllocs">--</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Arena Resets</span>
+                <span class="metric-value good" id="arenaResets">--</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Bytes per Frame</span>
+                <span class="metric-value" id="bytesPerFrame">--</span>
+            </div>
+            <div class="bar"><div class="bar-fill" id="arenaBar" style="width:0%"></div></div>
+            <div class="chart-container">
+                <span class="chart-label">Arena Usage (MB) - данные с сервера</span>
+                <canvas id="arenaChart" width="100%" height="100%"></canvas>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">🚫 NO GARBAGE COLLECTOR</div>
+            <div class="metric-row">
+                <span class="metric-label">GC Cycles</span>
+                <span class="metric-value good" id="numGC">0 ✨</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">GC Pause Time</span>
+                <span class="metric-value good" id="pauseTotal">0 ms ✨</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">GC CPU Usage</span>
+                <span class="metric-value good" id="gcCPU">0% ✨</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Memory Leaks</span>
+                <span class="metric-value good" id="leaks">Impossible ✨</span>
+            </div>
+            <div class="highlight-box">
+                ✅ C++ Memory Arena<br>
+                <small>Нет GC = Нет пауз = Предсказуемая латенция</small>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">🔄 ARENA EFFICIENCY</div>
+            <div class="metric-row">
+                <span class="metric-label">Reuse Efficiency</span>
+                <span class="metric-value good" id="efficiency">--</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Active Threads</span>
+                <span class="metric-value" id="threads">8</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Arena Size (per thread)</span>
+                <span class="metric-value" id="arenaSize">8 MB</span>
+            </div>
+            <div class="bar"><div class="bar-fill" id="efficiencyBar" style="width:100%"></div></div>
+            <div class="highlight-box" style="background: rgba(88, 166, 255, 0.1); border-color: #58a6ff; color: #58a6ff;">
+                Memory Arena переиспользует память<br>
+                <small>Выделение = O(1), Сброс = мгновенный</small>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">⚡ PROCESSING</div>
+            <div class="metric-row">
+                <span class="metric-label">Total Frames</span>
+                <span class="metric-value info" id="totalFrames">--</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">FPS</span>
+                <span class="metric-value good" id="fps">--</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Avg Latency</span>
+                <span class="metric-value highlight" id="avgLatency">--</span>
+            </div>
+            <div class="chart-container">
+                <span class="chart-label">FPS History - данные с сервера</span>
+                <canvas id="fpsChart" width="100%" height="100%"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const RUNTIME_URL = 'http://localhost:8080/runtime';
+        const GATEWAY_URL = 'http://localhost:8080';
+        
+        // История строится только из реальных данных с сервера
+        // Когда страница закрыта - данные не обновляются (это нормально)
+        const arenaHistory = [];
+        const fpsHistory = [];
+        let arenaMaxValue = 8; // Начальный максимум для Arena (8 MB)
+        let fpsMaxValue = 10;  // Начальный максимум для FPS
+        
+        function formatBytes(b) {
+            if (b < 1024) return b + ' B';
+            if (b < 1024*1024) return (b/1024).toFixed(1) + ' KB';
+            return (b/1024/1024).toFixed(2) + ' MB';
+        }
+        
+        async function fetchRuntime() {
+            try {
+                const resp = await fetch(RUNTIME_URL);
+                if (!resp.ok) throw new Error('Not OK');
+                const data = await resp.json();
+                
+                document.getElementById('status').classList.add('online');
+                document.getElementById('statusText').textContent = 'Connected';
+                document.getElementById('errorBox').style.display = 'none';
+                
+                // Arena
+                const arenaUsed = data.arena?.current_size_bytes || data.memory?.arena_allocated_bytes || 0;
+                const arenaPeak = data.arena?.peak_size_bytes || data.memory?.peak_arena_bytes || 8*1024*1024;
+                
+                document.getElementById('arenaUsed').textContent = formatBytes(arenaUsed);
+                document.getElementById('arenaPeak').textContent = formatBytes(arenaPeak);
+                document.getElementById('totalAllocs').textContent = (data.arena?.total_allocations || 0).toLocaleString();
+                document.getElementById('arenaResets').textContent = (data.arena?.total_resets || 0).toLocaleString();
+                document.getElementById('bytesPerFrame').textContent = formatBytes(data.arena?.bytes_per_frame || 921600);
+                
+                const arenaPct = arenaPeak > 0 ? (arenaUsed / arenaPeak * 100) : 0;
+                document.getElementById('arenaBar').style.width = arenaPct + '%';
+                
+                // Efficiency
+                const eff = data.arena?.efficiency_percent || 100;
+                document.getElementById('efficiency').textContent = eff.toFixed(0) + '%';
+                document.getElementById('efficiencyBar').style.width = eff + '%';
+                
+                // Processing
+                document.getElementById('totalFrames').textContent = (data.processing?.total_frames || 0).toLocaleString();
+                document.getElementById('fps').textContent = (data.processing?.fps || 0).toFixed(1);
+                document.getElementById('avgLatency').textContent = (data.processing?.avg_latency_ms || 0).toFixed(2) + ' ms';
+                document.getElementById('uptimeDisplay').textContent = 'Uptime: ' + (data.process?.uptime_seconds || 0).toFixed(0) + 's';
+                
+                // History
+                const arenaMB = arenaUsed / 1024 / 1024;
+                arenaHistory.push(arenaMB);
+                if (arenaHistory.length > 60) arenaHistory.shift();
+                
+                // Обновляем максимум для Arena (с небольшим затуханием)
+                if (arenaMB > arenaMaxValue) {
+                    arenaMaxValue = arenaMB * 1.1;
+                } else {
+                    // Постепенно уменьшаем максимум если данные стабильны
+                    const currentMax = Math.max(...arenaHistory.slice(-10)) * 1.1;
+                    if (currentMax < arenaMaxValue * 0.8) {
+                        arenaMaxValue = Math.max(currentMax, arenaMaxValue * 0.95);
+                    }
+                }
+                
+                const fps = data.processing?.fps || 0;
+                fpsHistory.push(fps);
+                if (fpsHistory.length > 60) fpsHistory.shift();
+                
+                // Обновляем максимум для FPS
+                if (fps > fpsMaxValue) {
+                    fpsMaxValue = fps * 1.2;
+                } else {
+                    const currentMax = Math.max(...fpsHistory.slice(-10)) * 1.2;
+                    if (currentMax < fpsMaxValue * 0.7) {
+                        fpsMaxValue = Math.max(currentMax, fpsMaxValue * 0.95);
+                    }
+                }
+                
+                drawChart('arenaChart', arenaHistory, '#58a6ff', arenaMaxValue);
+                drawChart('fpsChart', fpsHistory, '#3fb950', fpsMaxValue);
+                
+            } catch (e) {
+                document.getElementById('status').classList.remove('online');
+                document.getElementById('statusText').textContent = 'Disconnected';
+                document.getElementById('errorBox').style.display = 'block';
+            }
+        }
+        
+        function drawChart(id, data, color, maxValue) {
+            const canvas = document.getElementById(id);
+            const container = canvas.parentElement;
+            const ctx = canvas.getContext('2d');
+            
+            const w = container.clientWidth || 300;
+            const h = container.clientHeight || 120;
+            
+            canvas.width = w;
+            canvas.height = h;
+            
+            ctx.clearRect(0, 0, w, h);
+            
+            if (data.length < 2) return;
+            
+            // Используем переданный максимум или вычисляем из данных
+            const max = maxValue || Math.max(...data) * 1.1 || 1;
+            const padding = 5;
+            
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            
+            data.forEach((v, i) => {
+                const x = padding + (i / (data.length - 1)) * (w - padding * 2);
+                const y = h - padding - (v / max) * (h - padding * 2);
+                i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+            });
+            ctx.stroke();
+            
+            // Fill under line
+            ctx.lineTo(w - padding, h - padding);
+            ctx.lineTo(padding, h - padding);
+            ctx.closePath();
+            ctx.fillStyle = color + '20';
+            ctx.fill();
+            
+            // Value label
+            ctx.fillStyle = '#fff';
+            ctx.font = '11px monospace';
+            ctx.textAlign = 'right';
+            ctx.fillText(data[data.length-1].toFixed(1), w - 8, 18);
+        }
+        
+        async function runStressTest() {
+            const data = btoa(String.fromCharCode(...new Uint8Array(640*480*3).map(() => Math.random()*256|0)));
+            for (let i = 0; i < 50; i++) {
+                fetch(`${GATEWAY_URL}/process`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({data, width: 640, height: 480, filter: 'gaussian_blur', blur_radius: 5})
+                }).catch(() => {});
+            }
+        }
+        
+        function clearHistory() {
+            if (confirm('Очистить историю графиков? График начнется заново с текущих данных сервера.')) {
+                arenaHistory.length = 0;
+                fpsHistory.length = 0;
+                arenaMaxValue = 8;
+                fpsMaxValue = 10;
+                drawChart('arenaChart', arenaHistory, '#58a6ff', arenaMaxValue);
+                drawChart('fpsChart', fpsHistory, '#3fb950', fpsMaxValue);
+            }
+        }
+        
+        setInterval(fetchRuntime, 500);
+        fetchRuntime();
+    </script>
+</body>
+</html>
+
