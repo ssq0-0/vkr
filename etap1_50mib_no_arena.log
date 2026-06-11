@@ -1,0 +1,501 @@
+=== no_arena 3387 x 50MiB ===
+[valgrind-remote] === etap1 / no_arena / total=3387 ===
+[valgrind-remote] каталог: /root/streaming-system
+[valgrind-remote] Сборка Debug: /root/streaming-system/processor-cpp/build-valgrind
+-- Build type: Debug
+-- CXX flags:  -mavx2 -mfma
+-- System processor: x86_64
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /root/streaming-system/processor-cpp/build-valgrind
+[ 36%] Built target streaming_proto
+[ 72%] Built target processor_lib
+[100%] Built target processor_server
+[valgrind-remote] Сборка grpc_load
+[valgrind-remote] Старт processor_server (no_arena) под Valgrind
+[valgrind-remote] Valgrind-лог: /root/streaming-system/valgrind-logs/valgrind_server_no_arena.log
+[valgrind-remote] Сервер готов (4s), порты 19090 / 19091
+[valgrind-remote] Нагрузка: etap1 / no_arena / 30m
+[valgrind-remote] Команда: grpc_load -target 127.0.0.1:19090 --memory-mode no_arena -c 16 -total 3387 -s 50 -filter grayscale -worker-stagger-ms 400 -report-interval 30
+[valgrind-remote] Лог: /root/streaming-system/valgrind-logs/grpc_load_etap1_no_arena.log
+[valgrind-remote] Valgrind замедляет сервер — прогон может идти много часов.
+2026/06/05 22:15:00 === gRPC direct load (Go) ===
+2026/06/05 22:15:31 target=127.0.0.1:19090 c=16 payload=50.00MiB(52428798 bytes) memory_mode=no_arena filters=grayscale total=3387
+2026/06/05 22:16:03 воркеров: 16 goroutines, по одному gRPC-соединению на воркера
+2026/06/05 22:16:34 worker-stagger: 400 ms между стартами
+2026/06/05 22:17:06
+2026/06/05 22:17:37 MONITOR t=030s progress 0/3387 grpc_ok=0 app_ok=0 fail=0 rps=0.00 avg=0s
+2026/06/05 22:18:09 MONITOR t=060s progress 7/3387 grpc_ok=7 app_ok=7 fail=0 rps=0.12 avg=43.792s
+2026/06/05 22:18:41 MONITOR t=090s progress 15/3387 grpc_ok=15 app_ok=15 fail=0 rps=0.18 avg=38.617s
+2026/06/05 22:19:12 MONITOR t=120s progress 25/3387 grpc_ok=25 app_ok=25 fail=0 rps=0.22 avg=36.546s
+2026/06/05 22:19:44 MONITOR t=150s progress 30/3387 grpc_ok=30 app_ok=30 fail=0 rps=0.21 avg=41.898s
+2026/06/05 22:20:15 MONITOR t=180s progress 40/3387 grpc_ok=40 app_ok=40 fail=0 rps=0.24 avg=48.633s
+2026/06/05 22:20:47 MONITOR t=210s progress 48/3387 grpc_ok=48 app_ok=48 fail=0 rps=0.24 avg=50.926s
+2026/06/05 22:21:18 MONITOR t=240s progress 57/3387 grpc_ok=57 app_ok=57 fail=0 rps=0.25 avg=48.201s
+2026/06/05 22:21:50 MONITOR t=270s progress 69/3387 grpc_ok=69 app_ok=69 fail=0 rps=0.27 avg=47.784s
+2026/06/05 22:22:22 MONITOR t=300s progress 75/3387 grpc_ok=75 app_ok=75 fail=0 rps=0.27 avg=49.704s
+2026/06/05 22:22:53 MONITOR t=330s progress 85/3387 grpc_ok=85 app_ok=85 fail=0 rps=0.27 avg=49.182s
+2026/06/05 22:23:25 MONITOR t=360s progress 92/3387 grpc_ok=92 app_ok=92 fail=0 rps=0.27 avg=51.268s
+2026/06/05 22:23:56 MONITOR t=390s progress 103/3387 grpc_ok=103 app_ok=103 fail=0 rps=0.28 avg=52.317s
+2026/06/05 22:24:28 MONITOR t=420s progress 108/3387 grpc_ok=108 app_ok=108 fail=0 rps=0.27 avg=52.247s
+2026/06/05 22:25:00 MONITOR t=450s progress 116/3387 grpc_ok=116 app_ok=116 fail=0 rps=0.27 avg=50.89s
+2026/06/05 22:25:31 MONITOR t=480s progress 123/3387 grpc_ok=123 app_ok=123 fail=0 rps=0.27 avg=49.566s
+2026/06/05 22:26:03 MONITOR t=510s progress 133/3387 grpc_ok=133 app_ok=133 fail=0 rps=0.28 avg=50.098s
+2026/06/05 22:26:34 MONITOR t=540s progress 141/3387 grpc_ok=141 app_ok=141 fail=0 rps=0.28 avg=51.969s
+2026/06/05 22:27:06 MONITOR t=570s progress 148/3387 grpc_ok=148 app_ok=148 fail=0 rps=0.28 avg=52.972s
+2026/06/05 22:27:37 MONITOR t=600s progress 158/3387 grpc_ok=158 app_ok=158 fail=0 rps=0.28 avg=52.966s
+2026/06/05 22:28:09 MONITOR t=630s progress 166/3387 grpc_ok=166 app_ok=166 fail=0 rps=0.28 avg=52.562s
+2026/06/05 22:28:41 MONITOR t=660s progress 176/3387 grpc_ok=176 app_ok=176 fail=0 rps=0.28 avg=52.008s
+2026/06/05 22:29:12 MONITOR t=690s progress 185/3387 grpc_ok=185 app_ok=185 fail=0 rps=0.29 avg=52.45s
+2026/06/05 22:29:44 MONITOR t=720s progress 189/3387 grpc_ok=189 app_ok=189 fail=0 rps=0.28 avg=52.794s
+2026/06/05 22:30:15 MONITOR t=750s progress 199/3387 grpc_ok=199 app_ok=199 fail=0 rps=0.28 avg=52.062s
+2026/06/05 22:30:47 MONITOR t=780s progress 210/3387 grpc_ok=210 app_ok=210 fail=0 rps=0.29 avg=52.694s
+2026/06/05 22:31:18 MONITOR t=810s progress 215/3387 grpc_ok=215 app_ok=215 fail=0 rps=0.28 avg=52.272s
+2026/06/05 22:31:50 MONITOR t=840s progress 223/3387 grpc_ok=223 app_ok=223 fail=0 rps=0.28 avg=51.751s
+2026/06/05 22:32:22 MONITOR t=870s progress 230/3387 grpc_ok=230 app_ok=230 fail=0 rps=0.28 avg=51.767s
+2026/06/05 22:32:53 MONITOR t=900s progress 242/3387 grpc_ok=242 app_ok=242 fail=0 rps=0.29 avg=52.727s
+2026/06/05 22:33:25 MONITOR t=930s progress 247/3387 grpc_ok=247 app_ok=247 fail=0 rps=0.28 avg=53.956s
+2026/06/05 22:33:56 MONITOR t=960s progress 254/3387 grpc_ok=254 app_ok=254 fail=0 rps=0.28 avg=53.732s
+2026/06/05 22:34:28 MONITOR t=990s progress 263/3387 grpc_ok=263 app_ok=263 fail=0 rps=0.28 avg=53.458s
+2026/06/05 22:35:00 MONITOR t=1020s progress 270/3387 grpc_ok=270 app_ok=270 fail=0 rps=0.28 avg=53.485s
+2026/06/05 22:35:31 MONITOR t=1050s progress 278/3387 grpc_ok=278 app_ok=278 fail=0 rps=0.28 avg=53.522s
+2026/06/05 22:36:03 MONITOR t=1080s progress 287/3387 grpc_ok=287 app_ok=287 fail=0 rps=0.28 avg=53.943s
+2026/06/05 22:36:34 MONITOR t=1110s progress 294/3387 grpc_ok=294 app_ok=294 fail=0 rps=0.28 avg=54.124s
+2026/06/05 22:37:06 MONITOR t=1140s progress 302/3387 grpc_ok=302 app_ok=302 fail=0 rps=0.28 avg=53.571s
+2026/06/05 22:37:37 MONITOR t=1170s progress 311/3387 grpc_ok=311 app_ok=311 fail=0 rps=0.28 avg=53.714s
+2026/06/05 22:38:09 MONITOR t=1200s progress 318/3387 grpc_ok=318 app_ok=318 fail=0 rps=0.28 avg=53.408s
+2026/06/05 22:38:41 MONITOR t=1230s progress 326/3387 grpc_ok=326 app_ok=326 fail=0 rps=0.28 avg=53.475s
+2026/06/05 22:39:12 MONITOR t=1260s progress 332/3387 grpc_ok=332 app_ok=332 fail=0 rps=0.28 avg=53.977s
+2026/06/05 22:39:44 MONITOR t=1290s progress 341/3387 grpc_ok=341 app_ok=341 fail=0 rps=0.28 avg=53.975s
+2026/06/05 22:40:15 MONITOR t=1320s progress 352/3387 grpc_ok=352 app_ok=352 fail=0 rps=0.28 avg=55.04s
+2026/06/05 22:40:47 MONITOR t=1350s progress 357/3387 grpc_ok=357 app_ok=357 fail=0 rps=0.28 avg=54.85s
+2026/06/05 22:41:18 MONITOR t=1380s progress 364/3387 grpc_ok=364 app_ok=364 fail=0 rps=0.28 avg=54.539s
+2026/06/05 22:41:50 MONITOR t=1410s progress 373/3387 grpc_ok=373 app_ok=373 fail=0 rps=0.28 avg=54.004s
+2026/06/05 22:42:22 MONITOR t=1440s progress 380/3387 grpc_ok=380 app_ok=380 fail=0 rps=0.28 avg=54.076s
+2026/06/05 22:42:53 MONITOR t=1470s progress 390/3387 grpc_ok=390 app_ok=390 fail=0 rps=0.28 avg=54.217s
+2026/06/05 22:43:25 MONITOR t=1500s progress 396/3387 grpc_ok=396 app_ok=396 fail=0 rps=0.28 avg=54.372s
+2026/06/05 22:43:56 MONITOR t=1530s progress 404/3387 grpc_ok=404 app_ok=404 fail=0 rps=0.28 avg=54.546s
+2026/06/05 22:44:28 MONITOR t=1560s progress 411/3387 grpc_ok=411 app_ok=411 fail=0 rps=0.28 avg=54.642s
+2026/06/05 22:45:00 MONITOR t=1590s progress 421/3387 grpc_ok=421 app_ok=421 fail=0 rps=0.28 avg=54.888s
+2026/06/05 22:45:31 MONITOR t=1620s progress 427/3387 grpc_ok=427 app_ok=427 fail=0 rps=0.28 avg=54.891s
+2026/06/05 22:46:03 MONITOR t=1650s progress 436/3387 grpc_ok=436 app_ok=436 fail=0 rps=0.28 avg=54.958s
+2026/06/05 22:46:34 MONITOR t=1680s progress 442/3387 grpc_ok=442 app_ok=442 fail=0 rps=0.28 avg=55.051s
+2026/06/05 22:47:06 MONITOR t=1710s progress 452/3387 grpc_ok=452 app_ok=452 fail=0 rps=0.28 avg=54.743s
+2026/06/05 22:47:37 MONITOR t=1740s progress 457/3387 grpc_ok=457 app_ok=457 fail=0 rps=0.28 avg=54.896s
+2026/06/05 22:48:09 MONITOR t=1770s progress 465/3387 grpc_ok=465 app_ok=465 fail=0 rps=0.28 avg=55.287s
+2026/06/05 22:48:41 MONITOR t=1800s progress 470/3387 grpc_ok=470 app_ok=470 fail=0 rps=0.28 avg=55.619s
+2026/06/05 22:49:12 MONITOR t=1830s progress 479/3387 grpc_ok=479 app_ok=479 fail=0 rps=0.28 avg=55.379s
+2026/06/05 22:49:44 MONITOR t=1860s progress 488/3387 grpc_ok=488 app_ok=488 fail=0 rps=0.28 avg=55.016s
+2026/06/05 22:50:15 MONITOR t=1890s progress 499/3387 grpc_ok=499 app_ok=499 fail=0 rps=0.28 avg=54.868s
+2026/06/05 22:50:47 MONITOR t=1920s progress 505/3387 grpc_ok=505 app_ok=505 fail=0 rps=0.28 avg=54.841s
+2026/06/05 22:51:18 MONITOR t=1950s progress 514/3387 grpc_ok=514 app_ok=514 fail=0 rps=0.28 avg=55.318s
+2026/06/05 22:51:50 MONITOR t=1980s progress 521/3387 grpc_ok=521 app_ok=521 fail=0 rps=0.28 avg=55.825s
+2026/06/05 22:52:22 MONITOR t=2010s progress 527/3387 grpc_ok=527 app_ok=527 fail=0 rps=0.28 avg=56.03s
+2026/06/05 22:52:53 MONITOR t=2040s progress 535/3387 grpc_ok=535 app_ok=535 fail=0 rps=0.28 avg=55.724s
+2026/06/05 22:53:25 MONITOR t=2070s progress 546/3387 grpc_ok=546 app_ok=546 fail=0 rps=0.28 avg=55.527s
+2026/06/05 22:53:56 MONITOR t=2100s progress 551/3387 grpc_ok=551 app_ok=551 fail=0 rps=0.28 avg=55.546s
+2026/06/05 22:54:28 MONITOR t=2130s progress 561/3387 grpc_ok=561 app_ok=561 fail=0 rps=0.28 avg=55.559s
+2026/06/05 22:55:00 MONITOR t=2160s progress 566/3387 grpc_ok=566 app_ok=566 fail=0 rps=0.28 avg=55.3s
+2026/06/05 22:55:31 MONITOR t=2190s progress 577/3387 grpc_ok=577 app_ok=577 fail=0 rps=0.28 avg=55.574s
+2026/06/05 22:56:03 MONITOR t=2220s progress 583/3387 grpc_ok=583 app_ok=583 fail=0 rps=0.28 avg=55.69s
+2026/06/05 22:56:34 MONITOR t=2250s progress 591/3387 grpc_ok=591 app_ok=591 fail=0 rps=0.28 avg=55.81s
+2026/06/05 22:57:06 MONITOR t=2280s progress 596/3387 grpc_ok=596 app_ok=596 fail=0 rps=0.28 avg=55.702s
+2026/06/05 22:57:37 MONITOR t=2310s progress 608/3387 grpc_ok=608 app_ok=608 fail=0 rps=0.28 avg=55.753s
+2026/06/05 22:58:09 MONITOR t=2340s progress 612/3387 grpc_ok=612 app_ok=612 fail=0 rps=0.28 avg=55.621s
+2026/06/05 22:58:41 MONITOR t=2370s progress 622/3387 grpc_ok=622 app_ok=622 fail=0 rps=0.28 avg=55.74s
+2026/06/05 22:59:12 MONITOR t=2400s progress 631/3387 grpc_ok=631 app_ok=631 fail=0 rps=0.28 avg=55.604s
+2026/06/05 22:59:44 MONITOR t=2430s progress 638/3387 grpc_ok=638 app_ok=638 fail=0 rps=0.28 avg=56.3s
+2026/06/05 23:00:15 MONITOR t=2460s progress 645/3387 grpc_ok=645 app_ok=645 fail=0 rps=0.28 avg=56.072s
+2026/06/05 23:00:47 MONITOR t=2490s progress 655/3387 grpc_ok=655 app_ok=655 fail=0 rps=0.28 avg=55.795s
+2026/06/05 23:01:18 MONITOR t=2520s progress 662/3387 grpc_ok=662 app_ok=662 fail=0 rps=0.28 avg=55.664s
+2026/06/05 23:01:50 MONITOR t=2550s progress 670/3387 grpc_ok=670 app_ok=670 fail=0 rps=0.28 avg=55.637s
+2026/06/05 23:02:22 MONITOR t=2580s progress 679/3387 grpc_ok=679 app_ok=679 fail=0 rps=0.28 avg=55.337s
+2026/06/05 23:02:53 MONITOR t=2610s progress 685/3387 grpc_ok=685 app_ok=685 fail=0 rps=0.28 avg=55.165s
+2026/06/05 23:03:25 MONITOR t=2640s progress 697/3387 grpc_ok=697 app_ok=697 fail=0 rps=0.28 avg=56.307s
+2026/06/05 23:03:56 MONITOR t=2670s progress 702/3387 grpc_ok=702 app_ok=702 fail=0 rps=0.28 avg=56.335s
+2026/06/05 23:04:28 MONITOR t=2700s progress 711/3387 grpc_ok=711 app_ok=711 fail=0 rps=0.28 avg=56.306s
+2026/06/05 23:05:00 MONITOR t=2730s progress 717/3387 grpc_ok=717 app_ok=717 fail=0 rps=0.28 avg=56.219s
+2026/06/05 23:05:31 MONITOR t=2760s progress 726/3387 grpc_ok=726 app_ok=726 fail=0 rps=0.28 avg=55.94s
+2026/06/05 23:06:03 MONITOR t=2790s progress 731/3387 grpc_ok=731 app_ok=731 fail=0 rps=0.28 avg=55.773s
+2026/06/05 23:06:34 MONITOR t=2820s progress 739/3387 grpc_ok=739 app_ok=739 fail=0 rps=0.28 avg=55.703s
+2026/06/05 23:07:06 MONITOR t=2850s progress 750/3387 grpc_ok=750 app_ok=750 fail=0 rps=0.28 avg=55.567s
+2026/06/05 23:07:37 MONITOR t=2880s progress 758/3387 grpc_ok=758 app_ok=758 fail=0 rps=0.28 avg=56.362s
+2026/06/05 23:08:09 MONITOR t=2910s progress 767/3387 grpc_ok=767 app_ok=767 fail=0 rps=0.28 avg=56.249s
+2026/06/05 23:08:41 MONITOR t=2940s progress 771/3387 grpc_ok=771 app_ok=771 fail=0 rps=0.28 avg=56.126s
+2026/06/05 23:09:12 MONITOR t=2970s progress 778/3387 grpc_ok=778 app_ok=778 fail=0 rps=0.28 avg=56.039s
+2026/06/05 23:09:44 MONITOR t=3000s progress 789/3387 grpc_ok=789 app_ok=789 fail=0 rps=0.28 avg=56.197s
+2026/06/05 23:10:15 MONITOR t=3030s progress 794/3387 grpc_ok=794 app_ok=794 fail=0 rps=0.28 avg=56.194s
+2026/06/05 23:10:47 MONITOR t=3060s progress 804/3387 grpc_ok=804 app_ok=804 fail=0 rps=0.28 avg=55.939s
+2026/06/05 23:11:18 MONITOR t=3090s progress 810/3387 grpc_ok=810 app_ok=810 fail=0 rps=0.28 avg=55.772s
+2026/06/05 23:11:50 MONITOR t=3120s progress 819/3387 grpc_ok=819 app_ok=819 fail=0 rps=0.28 avg=56.216s
+2026/06/05 23:12:22 MONITOR t=3150s progress 825/3387 grpc_ok=825 app_ok=825 fail=0 rps=0.28 avg=56.503s
+2026/06/05 23:12:53 MONITOR t=3180s progress 832/3387 grpc_ok=832 app_ok=832 fail=0 rps=0.28 avg=56.398s
+2026/06/05 23:13:25 MONITOR t=3210s progress 839/3387 grpc_ok=839 app_ok=839 fail=0 rps=0.28 avg=56.355s
+2026/06/05 23:13:56 MONITOR t=3240s progress 848/3387 grpc_ok=848 app_ok=848 fail=0 rps=0.28 avg=56.193s
+2026/06/05 23:14:28 MONITOR t=3270s progress 859/3387 grpc_ok=859 app_ok=859 fail=0 rps=0.28 avg=55.999s
+2026/06/05 23:15:00 MONITOR t=3300s progress 864/3387 grpc_ok=864 app_ok=864 fail=0 rps=0.28 avg=55.854s
+2026/06/05 23:15:31 MONITOR t=3330s progress 872/3387 grpc_ok=872 app_ok=872 fail=0 rps=0.28 avg=55.932s
+2026/06/05 23:16:03 MONITOR t=3360s progress 880/3387 grpc_ok=880 app_ok=880 fail=0 rps=0.28 avg=56.301s
+2026/06/05 23:16:34 MONITOR t=3390s progress 887/3387 grpc_ok=887 app_ok=887 fail=0 rps=0.28 avg=56.814s
+2026/06/05 23:17:06 MONITOR t=3420s progress 895/3387 grpc_ok=895 app_ok=895 fail=0 rps=0.28 avg=56.758s
+2026/06/05 23:17:37 MONITOR t=3450s progress 904/3387 grpc_ok=904 app_ok=904 fail=0 rps=0.28 avg=56.624s
+2026/06/05 23:18:09 MONITOR t=3480s progress 908/3387 grpc_ok=908 app_ok=908 fail=0 rps=0.28 avg=56.505s
+2026/06/05 23:18:41 MONITOR t=3510s progress 918/3387 grpc_ok=918 app_ok=918 fail=0 rps=0.28 avg=56.288s
+2026/06/05 23:19:12 MONITOR t=3540s progress 926/3387 grpc_ok=926 app_ok=926 fail=0 rps=0.28 avg=56.213s
+2026/06/05 23:19:44 MONITOR t=3570s progress 932/3387 grpc_ok=932 app_ok=932 fail=0 rps=0.28 avg=56.304s
+2026/06/05 23:20:15 MONITOR t=3600s progress 942/3387 grpc_ok=942 app_ok=942 fail=0 rps=0.28 avg=56.622s
+2026/06/05 23:20:47 MONITOR t=3630s progress 947/3387 grpc_ok=947 app_ok=947 fail=0 rps=0.28 avg=56.705s
+2026/06/05 23:21:18 MONITOR t=3660s progress 957/3387 grpc_ok=957 app_ok=957 fail=0 rps=0.28 avg=56.558s
+2026/06/05 23:21:50 MONITOR t=3690s progress 965/3387 grpc_ok=965 app_ok=965 fail=0 rps=0.28 avg=56.465s
+2026/06/05 23:22:22 MONITOR t=3720s progress 973/3387 grpc_ok=973 app_ok=973 fail=0 rps=0.28 avg=56.299s
+2026/06/05 23:22:53 MONITOR t=3750s progress 980/3387 grpc_ok=980 app_ok=980 fail=0 rps=0.28 avg=56.547s
+2026/06/05 23:23:25 MONITOR t=3780s progress 991/3387 grpc_ok=991 app_ok=991 fail=0 rps=0.28 avg=56.38s
+2026/06/05 23:23:56 MONITOR t=3810s progress 998/3387 grpc_ok=998 app_ok=998 fail=0 rps=0.28 avg=56.406s
+2026/06/05 23:24:28 MONITOR t=3840s progress 1003/3387 grpc_ok=1003 app_ok=1003 fail=0 rps=0.28 avg=56.662s
+2026/06/05 23:25:00 MONITOR t=3870s progress 1010/3387 grpc_ok=1010 app_ok=1010 fail=0 rps=0.28 avg=56.89s
+2026/06/05 23:25:31 MONITOR t=3900s progress 1018/3387 grpc_ok=1018 app_ok=1018 fail=0 rps=0.28 avg=56.833s
+2026/06/05 23:26:03 MONITOR t=3930s progress 1028/3387 grpc_ok=1028 app_ok=1028 fail=0 rps=0.28 avg=56.74s
+2026/06/05 23:26:34 MONITOR t=3960s progress 1031/3387 grpc_ok=1031 app_ok=1031 fail=0 rps=0.28 avg=56.673s
+2026/06/05 23:27:06 MONITOR t=3990s progress 1042/3387 grpc_ok=1042 app_ok=1042 fail=0 rps=0.28 avg=56.442s
+2026/06/05 23:27:37 MONITOR t=4020s progress 1052/3387 grpc_ok=1052 app_ok=1052 fail=0 rps=0.28 avg=56.444s
+2026/06/05 23:28:09 MONITOR t=4050s progress 1056/3387 grpc_ok=1056 app_ok=1056 fail=0 rps=0.28 avg=56.388s
+2026/06/05 23:28:41 MONITOR t=4080s progress 1065/3387 grpc_ok=1065 app_ok=1065 fail=0 rps=0.28 avg=56.773s
+2026/06/05 23:29:12 MONITOR t=4110s progress 1071/3387 grpc_ok=1071 app_ok=1071 fail=0 rps=0.28 avg=56.89s
+2026/06/05 23:29:44 MONITOR t=4140s progress 1080/3387 grpc_ok=1080 app_ok=1080 fail=0 rps=0.28 avg=57.111s
+2026/06/05 23:30:15 MONITOR t=4170s progress 1088/3387 grpc_ok=1088 app_ok=1088 fail=0 rps=0.28 avg=56.993s
+2026/06/05 23:30:47 MONITOR t=4200s progress 1095/3387 grpc_ok=1095 app_ok=1095 fail=0 rps=0.28 avg=56.976s
+2026/06/05 23:31:18 MONITOR t=4230s progress 1104/3387 grpc_ok=1104 app_ok=1104 fail=0 rps=0.28 avg=56.859s
+2026/06/05 23:31:50 MONITOR t=4260s progress 1109/3387 grpc_ok=1109 app_ok=1109 fail=0 rps=0.28 avg=56.734s
+2026/06/05 23:32:22 MONITOR t=4290s progress 1119/3387 grpc_ok=1119 app_ok=1119 fail=0 rps=0.28 avg=56.627s
+2026/06/05 23:32:53 MONITOR t=4320s progress 1126/3387 grpc_ok=1126 app_ok=1126 fail=0 rps=0.28 avg=56.996s
+2026/06/05 23:33:25 MONITOR t=4350s progress 1134/3387 grpc_ok=1134 app_ok=1134 fail=0 rps=0.28 avg=57.072s
+2026/06/05 23:33:56 MONITOR t=4380s progress 1142/3387 grpc_ok=1142 app_ok=1142 fail=0 rps=0.28 avg=57.049s
+2026/06/05 23:34:28 MONITOR t=4410s progress 1149/3387 grpc_ok=1149 app_ok=1149 fail=0 rps=0.28 avg=57.001s
+2026/06/05 23:35:00 MONITOR t=4440s progress 1156/3387 grpc_ok=1156 app_ok=1156 fail=0 rps=0.28 avg=56.886s
+2026/06/05 23:35:31 MONITOR t=4470s progress 1163/3387 grpc_ok=1163 app_ok=1163 fail=0 rps=0.28 avg=56.742s
+2026/06/05 23:36:03 MONITOR t=4500s progress 1171/3387 grpc_ok=1171 app_ok=1171 fail=0 rps=0.28 avg=56.605s
+2026/06/05 23:36:34 MONITOR t=4530s progress 1180/3387 grpc_ok=1180 app_ok=1180 fail=0 rps=0.28 avg=56.837s
+2026/06/05 23:37:06 MONITOR t=4560s progress 1188/3387 grpc_ok=1188 app_ok=1188 fail=0 rps=0.28 avg=57.164s
+2026/06/05 23:37:37 MONITOR t=4590s progress 1198/3387 grpc_ok=1198 app_ok=1198 fail=0 rps=0.28 avg=57.278s
+2026/06/05 23:38:09 MONITOR t=4620s progress 1203/3387 grpc_ok=1203 app_ok=1203 fail=0 rps=0.28 avg=57.214s
+2026/06/05 23:38:41 MONITOR t=4650s progress 1211/3387 grpc_ok=1211 app_ok=1211 fail=0 rps=0.28 avg=57.044s
+2026/06/05 23:39:12 MONITOR t=4680s progress 1218/3387 grpc_ok=1218 app_ok=1218 fail=0 rps=0.28 avg=56.986s
+2026/06/05 23:39:44 MONITOR t=4710s progress 1226/3387 grpc_ok=1226 app_ok=1226 fail=0 rps=0.28 avg=56.954s
+2026/06/05 23:40:15 MONITOR t=4740s progress 1232/3387 grpc_ok=1232 app_ok=1232 fail=0 rps=0.28 avg=56.852s
+2026/06/05 23:40:47 MONITOR t=4770s progress 1244/3387 grpc_ok=1244 app_ok=1244 fail=0 rps=0.28 avg=56.829s
+2026/06/05 23:41:18 MONITOR t=4800s progress 1250/3387 grpc_ok=1250 app_ok=1250 fail=0 rps=0.28 avg=56.878s
+2026/06/05 23:41:50 MONITOR t=4830s progress 1257/3387 grpc_ok=1257 app_ok=1257 fail=0 rps=0.28 avg=56.954s
+2026/06/05 23:42:22 MONITOR t=4860s progress 1264/3387 grpc_ok=1264 app_ok=1264 fail=0 rps=0.28 avg=56.9s
+2026/06/05 23:42:53 MONITOR t=4890s progress 1277/3387 grpc_ok=1277 app_ok=1277 fail=0 rps=0.28 avg=57.254s
+2026/06/05 23:43:25 MONITOR t=4920s progress 1280/3387 grpc_ok=1280 app_ok=1280 fail=0 rps=0.28 avg=57.205s
+2026/06/05 23:43:56 MONITOR t=4950s progress 1288/3387 grpc_ok=1288 app_ok=1288 fail=0 rps=0.28 avg=57.131s
+2026/06/05 23:44:28 MONITOR t=4980s progress 1295/3387 grpc_ok=1295 app_ok=1295 fail=0 rps=0.28 avg=57.043s
+2026/06/05 23:45:00 MONITOR t=5010s progress 1302/3387 grpc_ok=1302 app_ok=1302 fail=0 rps=0.28 avg=56.896s
+2026/06/05 23:45:31 MONITOR t=5040s progress 1312/3387 grpc_ok=1312 app_ok=1312 fail=0 rps=0.28 avg=57.078s
+2026/06/05 23:46:03 MONITOR t=5070s progress 1320/3387 grpc_ok=1320 app_ok=1320 fail=0 rps=0.28 avg=57.225s
+2026/06/05 23:46:34 MONITOR t=5100s progress 1327/3387 grpc_ok=1327 app_ok=1327 fail=0 rps=0.28 avg=57.161s
+2026/06/05 23:47:06 MONITOR t=5130s progress 1333/3387 grpc_ok=1333 app_ok=1333 fail=0 rps=0.28 avg=57.253s
+2026/06/05 23:47:37 MONITOR t=5160s progress 1340/3387 grpc_ok=1340 app_ok=1340 fail=0 rps=0.28 avg=57.164s
+2026/06/05 23:48:09 MONITOR t=5190s progress 1348/3387 grpc_ok=1348 app_ok=1348 fail=0 rps=0.28 avg=57.038s
+2026/06/05 23:48:41 MONITOR t=5220s progress 1358/3387 grpc_ok=1358 app_ok=1358 fail=0 rps=0.28 avg=57.011s
+2026/06/05 23:49:12 MONITOR t=5250s progress 1364/3387 grpc_ok=1364 app_ok=1364 fail=0 rps=0.28 avg=56.934s
+2026/06/05 23:49:44 MONITOR t=5280s progress 1371/3387 grpc_ok=1371 app_ok=1371 fail=0 rps=0.28 avg=57.197s
+2026/06/05 23:50:15 MONITOR t=5310s progress 1382/3387 grpc_ok=1382 app_ok=1382 fail=0 rps=0.28 avg=57.369s
+2026/06/05 23:50:47 MONITOR t=5340s progress 1387/3387 grpc_ok=1387 app_ok=1387 fail=0 rps=0.28 avg=57.352s
+2026/06/05 23:51:18 MONITOR t=5370s progress 1396/3387 grpc_ok=1396 app_ok=1396 fail=0 rps=0.28 avg=57.34s
+2026/06/05 23:51:50 MONITOR t=5400s progress 1402/3387 grpc_ok=1402 app_ok=1402 fail=0 rps=0.28 avg=57.294s
+2026/06/05 23:52:22 MONITOR t=5430s progress 1410/3387 grpc_ok=1410 app_ok=1410 fail=0 rps=0.28 avg=57.293s
+2026/06/05 23:52:53 MONITOR t=5460s progress 1419/3387 grpc_ok=1419 app_ok=1419 fail=0 rps=0.28 avg=57.174s
+2026/06/05 23:53:25 MONITOR t=5490s progress 1424/3387 grpc_ok=1424 app_ok=1424 fail=0 rps=0.28 avg=57.125s
+2026/06/05 23:53:56 MONITOR t=5520s progress 1432/3387 grpc_ok=1432 app_ok=1432 fail=0 rps=0.28 avg=57.15s
+2026/06/05 23:54:28 MONITOR t=5550s progress 1438/3387 grpc_ok=1438 app_ok=1438 fail=0 rps=0.28 avg=57.336s
+2026/06/05 23:55:00 MONITOR t=5580s progress 1447/3387 grpc_ok=1447 app_ok=1447 fail=0 rps=0.28 avg=57.392s
+2026/06/05 23:55:31 MONITOR t=5610s progress 1455/3387 grpc_ok=1455 app_ok=1455 fail=0 rps=0.28 avg=57.278s
+2026/06/05 23:56:03 MONITOR t=5640s progress 1463/3387 grpc_ok=1463 app_ok=1463 fail=0 rps=0.28 avg=57.332s
+2026/06/05 23:56:34 MONITOR t=5670s progress 1470/3387 grpc_ok=1470 app_ok=1470 fail=0 rps=0.28 avg=57.5s
+2026/06/05 23:57:06 MONITOR t=5700s progress 1475/3387 grpc_ok=1475 app_ok=1475 fail=0 rps=0.28 avg=57.428s
+2026/06/05 23:57:37 MONITOR t=5730s progress 1485/3387 grpc_ok=1485 app_ok=1485 fail=0 rps=0.28 avg=57.371s
+2026/06/05 23:58:09 MONITOR t=5760s progress 1491/3387 grpc_ok=1491 app_ok=1491 fail=0 rps=0.28 avg=57.446s
+2026/06/05 23:58:41 MONITOR t=5790s progress 1503/3387 grpc_ok=1503 app_ok=1503 fail=0 rps=0.28 avg=57.593s
+2026/06/05 23:59:12 MONITOR t=5820s progress 1506/3387 grpc_ok=1506 app_ok=1506 fail=0 rps=0.28 avg=57.562s
+2026/06/05 23:59:44 MONITOR t=5850s progress 1514/3387 grpc_ok=1514 app_ok=1514 fail=0 rps=0.28 avg=57.488s
+2026/06/06 00:00:15 MONITOR t=5880s progress 1524/3387 grpc_ok=1524 app_ok=1524 fail=0 rps=0.28 avg=57.474s
+2026/06/06 00:00:47 MONITOR t=5910s progress 1531/3387 grpc_ok=1531 app_ok=1531 fail=0 rps=0.28 avg=57.511s
+2026/06/06 00:01:18 MONITOR t=5940s progress 1538/3387 grpc_ok=1538 app_ok=1538 fail=0 rps=0.28 avg=57.419s
+2026/06/06 00:01:50 MONITOR t=5970s progress 1545/3387 grpc_ok=1545 app_ok=1545 fail=0 rps=0.28 avg=57.358s
+2026/06/06 00:02:22 MONITOR t=6000s progress 1554/3387 grpc_ok=1554 app_ok=1554 fail=0 rps=0.28 avg=57.368s
+2026/06/06 00:02:53 MONITOR t=6030s progress 1560/3387 grpc_ok=1560 app_ok=1560 fail=0 rps=0.27 avg=57.721s
+2026/06/06 00:03:25 MONITOR t=6060s progress 1568/3387 grpc_ok=1568 app_ok=1568 fail=0 rps=0.28 avg=57.657s
+2026/06/06 00:03:56 MONITOR t=6090s progress 1576/3387 grpc_ok=1576 app_ok=1576 fail=0 rps=0.28 avg=57.66s
+2026/06/06 00:04:28 MONITOR t=6120s progress 1584/3387 grpc_ok=1584 app_ok=1584 fail=0 rps=0.28 avg=57.588s
+2026/06/06 00:05:00 MONITOR t=6150s progress 1591/3387 grpc_ok=1591 app_ok=1591 fail=0 rps=0.27 avg=57.633s
+2026/06/06 00:05:31 MONITOR t=6180s progress 1598/3387 grpc_ok=1598 app_ok=1598 fail=0 rps=0.27 avg=57.556s
+2026/06/06 00:06:03 MONITOR t=6210s progress 1606/3387 grpc_ok=1606 app_ok=1606 fail=0 rps=0.27 avg=57.464s
+2026/06/06 00:06:34 MONITOR t=6240s progress 1614/3387 grpc_ok=1614 app_ok=1614 fail=0 rps=0.27 avg=57.642s
+2026/06/06 00:07:06 MONITOR t=6270s progress 1620/3387 grpc_ok=1620 app_ok=1620 fail=0 rps=0.27 avg=57.697s
+2026/06/06 00:07:37 MONITOR t=6300s progress 1630/3387 grpc_ok=1630 app_ok=1630 fail=0 rps=0.28 avg=57.615s
+2026/06/06 00:08:09 MONITOR t=6330s progress 1636/3387 grpc_ok=1636 app_ok=1636 fail=0 rps=0.27 avg=57.541s
+2026/06/06 00:08:41 MONITOR t=6360s progress 1646/3387 grpc_ok=1646 app_ok=1646 fail=0 rps=0.28 avg=57.427s
+2026/06/06 00:09:12 MONITOR t=6390s progress 1654/3387 grpc_ok=1654 app_ok=1654 fail=0 rps=0.28 avg=57.695s
+2026/06/06 00:09:44 MONITOR t=6420s progress 1661/3387 grpc_ok=1661 app_ok=1661 fail=0 rps=0.27 avg=57.632s
+2026/06/06 00:10:15 MONITOR t=6450s progress 1669/3387 grpc_ok=1669 app_ok=1669 fail=0 rps=0.28 avg=57.672s
+2026/06/06 00:10:47 MONITOR t=6480s progress 1677/3387 grpc_ok=1677 app_ok=1677 fail=0 rps=0.27 avg=57.682s
+2026/06/06 00:11:18 MONITOR t=6510s progress 1684/3387 grpc_ok=1684 app_ok=1684 fail=0 rps=0.27 avg=57.734s
+2026/06/06 00:11:50 MONITOR t=6540s progress 1693/3387 grpc_ok=1693 app_ok=1693 fail=0 rps=0.28 avg=57.646s
+2026/06/06 00:12:22 MONITOR t=6570s progress 1701/3387 grpc_ok=1701 app_ok=1701 fail=0 rps=0.28 avg=57.619s
+2026/06/06 00:12:53 MONITOR t=6600s progress 1707/3387 grpc_ok=1707 app_ok=1707 fail=0 rps=0.27 avg=57.551s
+2026/06/06 00:13:25 MONITOR t=6630s progress 1716/3387 grpc_ok=1716 app_ok=1716 fail=0 rps=0.28 avg=57.554s
+2026/06/06 00:13:56 MONITOR t=6660s progress 1724/3387 grpc_ok=1724 app_ok=1724 fail=0 rps=0.28 avg=57.473s
+2026/06/06 00:14:28 MONITOR t=6690s progress 1730/3387 grpc_ok=1730 app_ok=1730 fail=0 rps=0.27 avg=57.502s
+2026/06/06 00:15:00 MONITOR t=6720s progress 1741/3387 grpc_ok=1741 app_ok=1741 fail=0 rps=0.28 avg=57.627s
+2026/06/06 00:15:31 MONITOR t=6750s progress 1745/3387 grpc_ok=1745 app_ok=1745 fail=0 rps=0.27 avg=57.825s
+2026/06/06 00:16:03 MONITOR t=6780s progress 1753/3387 grpc_ok=1753 app_ok=1753 fail=0 rps=0.27 avg=57.771s
+2026/06/06 00:16:34 MONITOR t=6810s progress 1760/3387 grpc_ok=1760 app_ok=1760 fail=0 rps=0.27 avg=57.728s
+2026/06/06 00:17:06 MONITOR t=6840s progress 1769/3387 grpc_ok=1769 app_ok=1769 fail=0 rps=0.27 avg=57.62s
+2026/06/06 00:17:37 MONITOR t=6870s progress 1775/3387 grpc_ok=1775 app_ok=1775 fail=0 rps=0.27 avg=57.66s
+2026/06/06 00:18:09 MONITOR t=6900s progress 1784/3387 grpc_ok=1784 app_ok=1784 fail=0 rps=0.27 avg=57.656s
+2026/06/06 00:18:41 MONITOR t=6930s progress 1790/3387 grpc_ok=1790 app_ok=1790 fail=0 rps=0.27 avg=57.584s
+2026/06/06 00:19:12 MONITOR t=6960s progress 1799/3387 grpc_ok=1799 app_ok=1799 fail=0 rps=0.27 avg=57.716s
+2026/06/06 00:19:44 MONITOR t=6990s progress 1808/3387 grpc_ok=1808 app_ok=1808 fail=0 rps=0.27 avg=57.761s
+2026/06/06 00:20:15 MONITOR t=7020s progress 1815/3387 grpc_ok=1815 app_ok=1815 fail=0 rps=0.27 avg=57.707s
+2026/06/06 00:20:47 MONITOR t=7050s progress 1821/3387 grpc_ok=1821 app_ok=1821 fail=0 rps=0.27 avg=57.638s
+2026/06/06 00:21:18 MONITOR t=7080s progress 1829/3387 grpc_ok=1829 app_ok=1829 fail=0 rps=0.27 avg=57.628s
+2026/06/06 00:21:50 MONITOR t=7110s progress 1837/3387 grpc_ok=1837 app_ok=1837 fail=0 rps=0.27 avg=57.55s
+2026/06/06 00:22:22 MONITOR t=7140s progress 1844/3387 grpc_ok=1844 app_ok=1844 fail=0 rps=0.27 avg=57.629s
+2026/06/06 00:22:53 MONITOR t=7170s progress 1853/3387 grpc_ok=1853 app_ok=1853 fail=0 rps=0.27 avg=57.683s
+2026/06/06 00:23:25 MONITOR t=7200s progress 1858/3387 grpc_ok=1858 app_ok=1858 fail=0 rps=0.27 avg=57.762s
+2026/06/06 00:23:56 MONITOR t=7230s progress 1868/3387 grpc_ok=1868 app_ok=1868 fail=0 rps=0.27 avg=57.89s
+2026/06/06 00:24:28 MONITOR t=7260s progress 1876/3387 grpc_ok=1876 app_ok=1876 fail=0 rps=0.27 avg=57.881s
+2026/06/06 00:25:00 MONITOR t=7290s progress 1884/3387 grpc_ok=1884 app_ok=1884 fail=0 rps=0.27 avg=57.821s
+2026/06/06 00:25:31 MONITOR t=7320s progress 1891/3387 grpc_ok=1891 app_ok=1891 fail=0 rps=0.27 avg=57.76s
+2026/06/06 00:26:03 MONITOR t=7350s progress 1897/3387 grpc_ok=1897 app_ok=1897 fail=0 rps=0.27 avg=57.682s
+2026/06/06 00:26:34 MONITOR t=7380s progress 1906/3387 grpc_ok=1906 app_ok=1906 fail=0 rps=0.27 avg=57.606s
+2026/06/06 00:27:06 MONITOR t=7410s progress 1915/3387 grpc_ok=1915 app_ok=1915 fail=0 rps=0.27 avg=57.761s
+2026/06/06 00:27:37 MONITOR t=7440s progress 1923/3387 grpc_ok=1923 app_ok=1923 fail=0 rps=0.27 avg=57.698s
+2026/06/06 00:28:09 MONITOR t=7470s progress 1932/3387 grpc_ok=1932 app_ok=1932 fail=0 rps=0.27 avg=57.825s
+2026/06/06 00:28:41 MONITOR t=7500s progress 1937/3387 grpc_ok=1937 app_ok=1937 fail=0 rps=0.27 avg=57.923s
+2026/06/06 00:29:12 MONITOR t=7530s progress 1944/3387 grpc_ok=1944 app_ok=1944 fail=0 rps=0.27 avg=57.898s
+2026/06/06 00:29:44 MONITOR t=7560s progress 1952/3387 grpc_ok=1952 app_ok=1952 fail=0 rps=0.27 avg=57.805s
+2026/06/06 00:30:15 MONITOR t=7590s progress 1960/3387 grpc_ok=1960 app_ok=1960 fail=0 rps=0.27 avg=57.763s
+2026/06/06 00:30:47 MONITOR t=7620s progress 1968/3387 grpc_ok=1968 app_ok=1968 fail=0 rps=0.27 avg=57.699s
+2026/06/06 00:31:18 MONITOR t=7650s progress 1977/3387 grpc_ok=1977 app_ok=1977 fail=0 rps=0.27 avg=57.794s
+2026/06/06 00:31:50 MONITOR t=7680s progress 1985/3387 grpc_ok=1985 app_ok=1985 fail=0 rps=0.27 avg=57.835s
+2026/06/06 00:32:22 MONITOR t=7710s progress 1992/3387 grpc_ok=1992 app_ok=1992 fail=0 rps=0.27 avg=57.906s
+2026/06/06 00:32:53 MONITOR t=7740s progress 1996/3387 grpc_ok=1996 app_ok=1996 fail=0 rps=0.27 avg=57.859s
+2026/06/06 00:33:25 MONITOR t=7770s progress 2006/3387 grpc_ok=2006 app_ok=2006 fail=0 rps=0.27 avg=57.833s
+2026/06/06 00:33:56 MONITOR t=7800s progress 2013/3387 grpc_ok=2013 app_ok=2013 fail=0 rps=0.27 avg=57.755s
+2026/06/06 00:34:28 MONITOR t=7830s progress 2022/3387 grpc_ok=2022 app_ok=2022 fail=0 rps=0.27 avg=57.668s
+2026/06/06 00:35:00 MONITOR t=7860s progress 2029/3387 grpc_ok=2029 app_ok=2029 fail=0 rps=0.27 avg=57.563s
+2026/06/06 00:35:31 MONITOR t=7890s progress 2038/3387 grpc_ok=2038 app_ok=2038 fail=0 rps=0.27 avg=57.826s
+2026/06/06 00:36:03 MONITOR t=7920s progress 2047/3387 grpc_ok=2047 app_ok=2047 fail=0 rps=0.27 avg=57.825s
+2026/06/06 00:36:34 MONITOR t=7950s progress 2055/3387 grpc_ok=2055 app_ok=2055 fail=0 rps=0.27 avg=57.935s
+2026/06/06 00:37:06 MONITOR t=7980s progress 2061/3387 grpc_ok=2061 app_ok=2061 fail=0 rps=0.27 avg=57.905s
+2026/06/06 00:37:37 MONITOR t=8010s progress 2070/3387 grpc_ok=2070 app_ok=2070 fail=0 rps=0.27 avg=57.833s
+2026/06/06 00:38:09 MONITOR t=8040s progress 2079/3387 grpc_ok=2079 app_ok=2079 fail=0 rps=0.27 avg=57.775s
+2026/06/06 00:38:41 MONITOR t=8070s progress 2084/3387 grpc_ok=2084 app_ok=2084 fail=0 rps=0.27 avg=57.75s
+2026/06/06 00:39:12 MONITOR t=8100s progress 2092/3387 grpc_ok=2092 app_ok=2092 fail=0 rps=0.27 avg=57.721s
+2026/06/06 00:39:44 MONITOR t=8130s progress 2103/3387 grpc_ok=2103 app_ok=2103 fail=0 rps=0.27 avg=57.707s
+2026/06/06 00:40:15 MONITOR t=8160s progress 2110/3387 grpc_ok=2110 app_ok=2110 fail=0 rps=0.27 avg=57.646s
+2026/06/06 00:40:47 MONITOR t=8190s progress 2119/3387 grpc_ok=2119 app_ok=2119 fail=0 rps=0.27 avg=57.806s
+2026/06/06 00:41:18 MONITOR t=8220s progress 2125/3387 grpc_ok=2125 app_ok=2125 fail=0 rps=0.27 avg=57.77s
+2026/06/06 00:41:50 MONITOR t=8250s progress 2131/3387 grpc_ok=2131 app_ok=2131 fail=0 rps=0.27 avg=57.737s
+2026/06/06 00:42:22 MONITOR t=8280s progress 2137/3387 grpc_ok=2137 app_ok=2137 fail=0 rps=0.27 avg=57.9s
+2026/06/06 00:42:53 MONITOR t=8310s progress 2147/3387 grpc_ok=2147 app_ok=2147 fail=0 rps=0.27 avg=57.818s
+2026/06/06 00:43:25 MONITOR t=8340s progress 2154/3387 grpc_ok=2154 app_ok=2154 fail=0 rps=0.27 avg=57.839s
+2026/06/06 00:43:56 MONITOR t=8370s progress 2161/3387 grpc_ok=2161 app_ok=2161 fail=0 rps=0.27 avg=57.798s
+2026/06/06 00:44:28 MONITOR t=8400s progress 2169/3387 grpc_ok=2169 app_ok=2169 fail=0 rps=0.27 avg=57.827s
+2026/06/06 00:45:00 MONITOR t=8430s progress 2176/3387 grpc_ok=2176 app_ok=2176 fail=0 rps=0.27 avg=57.875s
+2026/06/06 00:45:31 MONITOR t=8460s progress 2184/3387 grpc_ok=2184 app_ok=2184 fail=0 rps=0.27 avg=57.989s
+2026/06/06 00:46:03 MONITOR t=8490s progress 2190/3387 grpc_ok=2190 app_ok=2190 fail=0 rps=0.27 avg=57.948s
+2026/06/06 00:46:34 MONITOR t=8520s progress 2197/3387 grpc_ok=2197 app_ok=2197 fail=0 rps=0.27 avg=57.97s
+2026/06/06 00:47:06 MONITOR t=8550s progress 2205/3387 grpc_ok=2205 app_ok=2205 fail=0 rps=0.27 avg=57.903s
+2026/06/06 00:47:37 MONITOR t=8580s progress 2211/3387 grpc_ok=2211 app_ok=2211 fail=0 rps=0.27 avg=57.852s
+2026/06/06 00:48:09 MONITOR t=8610s progress 2221/3387 grpc_ok=2221 app_ok=2221 fail=0 rps=0.27 avg=57.756s
+2026/06/06 00:48:41 MONITOR t=8640s progress 2230/3387 grpc_ok=2230 app_ok=2230 fail=0 rps=0.27 avg=57.733s
+2026/06/06 00:49:12 MONITOR t=8670s progress 2236/3387 grpc_ok=2236 app_ok=2236 fail=0 rps=0.27 avg=57.74s
+2026/06/06 00:49:44 MONITOR t=8700s progress 2245/3387 grpc_ok=2245 app_ok=2245 fail=0 rps=0.27 avg=58.025s
+2026/06/06 00:50:15 MONITOR t=8730s progress 2251/3387 grpc_ok=2251 app_ok=2251 fail=0 rps=0.27 avg=58.096s
+2026/06/06 00:50:47 MONITOR t=8760s progress 2258/3387 grpc_ok=2258 app_ok=2258 fail=0 rps=0.27 avg=58.065s
+2026/06/06 00:51:18 MONITOR t=8790s progress 2266/3387 grpc_ok=2266 app_ok=2266 fail=0 rps=0.27 avg=57.992s
+2026/06/06 00:51:50 MONITOR t=8820s progress 2276/3387 grpc_ok=2276 app_ok=2276 fail=0 rps=0.27 avg=57.964s
+2026/06/06 00:52:22 MONITOR t=8850s progress 2282/3387 grpc_ok=2282 app_ok=2282 fail=0 rps=0.27 avg=57.986s
+2026/06/06 00:52:53 MONITOR t=8880s progress 2290/3387 grpc_ok=2290 app_ok=2290 fail=0 rps=0.27 avg=57.94s
+2026/06/06 00:53:25 MONITOR t=8910s progress 2296/3387 grpc_ok=2296 app_ok=2296 fail=0 rps=0.27 avg=57.891s
+2026/06/06 00:53:56 MONITOR t=8940s progress 2303/3387 grpc_ok=2303 app_ok=2303 fail=0 rps=0.27 avg=57.83s
+2026/06/06 00:54:28 MONITOR t=8970s progress 2312/3387 grpc_ok=2312 app_ok=2312 fail=0 rps=0.27 avg=57.948s
+2026/06/06 00:55:00 MONITOR t=9000s progress 2321/3387 grpc_ok=2321 app_ok=2321 fail=0 rps=0.27 avg=57.972s
+2026/06/06 00:55:31 MONITOR t=9030s progress 2326/3387 grpc_ok=2326 app_ok=2326 fail=0 rps=0.27 avg=58.006s
+2026/06/06 00:56:03 MONITOR t=9060s progress 2334/3387 grpc_ok=2334 app_ok=2334 fail=0 rps=0.27 avg=58.004s
+2026/06/06 00:56:34 MONITOR t=9090s progress 2341/3387 grpc_ok=2341 app_ok=2341 fail=0 rps=0.27 avg=57.968s
+2026/06/06 00:57:06 MONITOR t=9120s progress 2348/3387 grpc_ok=2348 app_ok=2348 fail=0 rps=0.27 avg=57.898s
+2026/06/06 00:57:37 MONITOR t=9150s progress 2356/3387 grpc_ok=2356 app_ok=2356 fail=0 rps=0.27 avg=57.992s
+2026/06/06 00:58:09 MONITOR t=9180s progress 2362/3387 grpc_ok=2362 app_ok=2362 fail=0 rps=0.27 avg=57.945s
+2026/06/06 00:58:41 MONITOR t=9210s progress 2374/3387 grpc_ok=2374 app_ok=2374 fail=0 rps=0.27 avg=57.958s
+2026/06/06 00:59:12 MONITOR t=9240s progress 2381/3387 grpc_ok=2381 app_ok=2381 fail=0 rps=0.27 avg=58.007s
+2026/06/06 00:59:44 MONITOR t=9270s progress 2391/3387 grpc_ok=2391 app_ok=2391 fail=0 rps=0.27 avg=58.136s
+2026/06/06 01:00:15 MONITOR t=9300s progress 2396/3387 grpc_ok=2396 app_ok=2396 fail=0 rps=0.27 avg=58.098s
+2026/06/06 01:00:47 MONITOR t=9330s progress 2404/3387 grpc_ok=2404 app_ok=2404 fail=0 rps=0.27 avg=58.041s
+2026/06/06 01:01:18 MONITOR t=9360s progress 2413/3387 grpc_ok=2413 app_ok=2413 fail=0 rps=0.27 avg=58.006s
+2026/06/06 01:01:50 MONITOR t=9390s progress 2421/3387 grpc_ok=2421 app_ok=2421 fail=0 rps=0.27 avg=58.005s
+2026/06/06 01:02:22 MONITOR t=9420s progress 2429/3387 grpc_ok=2429 app_ok=2429 fail=0 rps=0.27 avg=57.933s
+2026/06/06 01:02:53 MONITOR t=9450s progress 2436/3387 grpc_ok=2436 app_ok=2436 fail=0 rps=0.27 avg=57.895s
+2026/06/06 01:03:25 MONITOR t=9480s progress 2443/3387 grpc_ok=2443 app_ok=2443 fail=0 rps=0.27 avg=57.828s
+2026/06/06 01:03:56 MONITOR t=9510s progress 2454/3387 grpc_ok=2454 app_ok=2454 fail=0 rps=0.27 avg=57.873s
+2026/06/06 01:04:28 MONITOR t=9540s progress 2460/3387 grpc_ok=2460 app_ok=2460 fail=0 rps=0.27 avg=58.008s
+2026/06/06 01:05:00 MONITOR t=9570s progress 2465/3387 grpc_ok=2465 app_ok=2465 fail=0 rps=0.27 avg=58.134s
+2026/06/06 01:05:31 MONITOR t=9600s progress 2473/3387 grpc_ok=2473 app_ok=2473 fail=0 rps=0.27 avg=58.154s
+2026/06/06 01:06:03 MONITOR t=9630s progress 2482/3387 grpc_ok=2482 app_ok=2482 fail=0 rps=0.27 avg=58.095s
+2026/06/06 01:06:34 MONITOR t=9660s progress 2489/3387 grpc_ok=2489 app_ok=2489 fail=0 rps=0.27 avg=58.03s
+2026/06/06 01:07:06 MONITOR t=9690s progress 2499/3387 grpc_ok=2499 app_ok=2499 fail=0 rps=0.27 avg=58.007s
+2026/06/06 01:07:37 MONITOR t=9720s progress 2506/3387 grpc_ok=2506 app_ok=2506 fail=0 rps=0.27 avg=57.926s
+2026/06/06 01:08:09 MONITOR t=9750s progress 2517/3387 grpc_ok=2517 app_ok=2517 fail=0 rps=0.27 avg=57.852s
+2026/06/06 01:08:41 MONITOR t=9780s progress 2522/3387 grpc_ok=2522 app_ok=2522 fail=0 rps=0.27 avg=57.859s
+2026/06/06 01:09:12 MONITOR t=9810s progress 2530/3387 grpc_ok=2530 app_ok=2530 fail=0 rps=0.27 avg=57.981s
+2026/06/06 01:09:44 MONITOR t=9840s progress 2539/3387 grpc_ok=2539 app_ok=2539 fail=0 rps=0.27 avg=58.044s
+2026/06/06 01:10:15 MONITOR t=9870s progress 2545/3387 grpc_ok=2545 app_ok=2545 fail=0 rps=0.27 avg=58.018s
+2026/06/06 01:10:47 MONITOR t=9900s progress 2552/3387 grpc_ok=2552 app_ok=2552 fail=0 rps=0.27 avg=57.97s
+2026/06/06 01:11:18 MONITOR t=9930s progress 2561/3387 grpc_ok=2561 app_ok=2561 fail=0 rps=0.27 avg=57.902s
+2026/06/06 01:11:50 MONITOR t=9960s progress 2569/3387 grpc_ok=2569 app_ok=2569 fail=0 rps=0.27 avg=57.835s
+2026/06/06 01:12:22 MONITOR t=9990s progress 2577/3387 grpc_ok=2577 app_ok=2577 fail=0 rps=0.27 avg=57.88s
+2026/06/06 01:12:53 MONITOR t=10020s progress 2584/3387 grpc_ok=2584 app_ok=2584 fail=0 rps=0.27 avg=57.976s
+2026/06/06 01:13:25 MONITOR t=10050s progress 2591/3387 grpc_ok=2591 app_ok=2591 fail=0 rps=0.27 avg=57.938s
+2026/06/06 01:13:56 MONITOR t=10080s progress 2599/3387 grpc_ok=2599 app_ok=2599 fail=0 rps=0.27 avg=57.957s
+2026/06/06 01:14:28 MONITOR t=10110s progress 2607/3387 grpc_ok=2607 app_ok=2607 fail=0 rps=0.27 avg=57.989s
+2026/06/06 01:15:00 MONITOR t=10140s progress 2616/3387 grpc_ok=2616 app_ok=2616 fail=0 rps=0.27 avg=58.03s
+2026/06/06 01:15:31 MONITOR t=10170s progress 2628/3387 grpc_ok=2628 app_ok=2628 fail=0 rps=0.27 avg=58.047s
+2026/06/06 01:16:03 MONITOR t=10200s progress 2634/3387 grpc_ok=2634 app_ok=2634 fail=0 rps=0.27 avg=58.006s
+2026/06/06 01:16:34 MONITOR t=10230s progress 2638/3387 grpc_ok=2638 app_ok=2638 fail=0 rps=0.27 avg=57.988s
+2026/06/06 01:17:06 MONITOR t=10260s progress 2648/3387 grpc_ok=2648 app_ok=2648 fail=0 rps=0.27 avg=57.908s
+2026/06/06 01:17:37 MONITOR t=10290s progress 2654/3387 grpc_ok=2654 app_ok=2654 fail=0 rps=0.27 avg=57.858s
+2026/06/06 01:18:09 MONITOR t=10320s progress 2663/3387 grpc_ok=2663 app_ok=2663 fail=0 rps=0.27 avg=57.826s
+2026/06/06 01:18:41 MONITOR t=10350s progress 2670/3387 grpc_ok=2670 app_ok=2670 fail=0 rps=0.27 avg=57.91s
+2026/06/06 01:19:12 MONITOR t=10380s progress 2676/3387 grpc_ok=2676 app_ok=2676 fail=0 rps=0.27 avg=57.872s
+2026/06/06 01:19:44 MONITOR t=10410s progress 2688/3387 grpc_ok=2688 app_ok=2688 fail=0 rps=0.27 avg=57.982s
+2026/06/06 01:20:15 MONITOR t=10440s progress 2694/3387 grpc_ok=2694 app_ok=2694 fail=0 rps=0.27 avg=58.083s
+2026/06/06 01:20:47 MONITOR t=10470s progress 2703/3387 grpc_ok=2703 app_ok=2703 fail=0 rps=0.27 avg=58.024s
+2026/06/06 01:21:18 MONITOR t=10500s progress 2711/3387 grpc_ok=2711 app_ok=2711 fail=0 rps=0.27 avg=58.012s
+2026/06/06 01:21:50 MONITOR t=10530s progress 2720/3387 grpc_ok=2720 app_ok=2720 fail=0 rps=0.27 avg=57.957s
+2026/06/06 01:22:22 MONITOR t=10560s progress 2724/3387 grpc_ok=2724 app_ok=2724 fail=0 rps=0.27 avg=57.988s
+2026/06/06 01:22:53 MONITOR t=10590s progress 2731/3387 grpc_ok=2731 app_ok=2731 fail=0 rps=0.27 avg=57.947s
+2026/06/06 01:23:25 MONITOR t=10620s progress 2740/3387 grpc_ok=2740 app_ok=2740 fail=0 rps=0.27 avg=57.882s
+2026/06/06 01:23:56 MONITOR t=10650s progress 2746/3387 grpc_ok=2746 app_ok=2746 fail=0 rps=0.27 avg=57.936s
+2026/06/06 01:24:28 MONITOR t=10680s progress 2754/3387 grpc_ok=2754 app_ok=2754 fail=0 rps=0.27 avg=58.024s
+2026/06/06 01:25:00 MONITOR t=10710s progress 2762/3387 grpc_ok=2762 app_ok=2762 fail=0 rps=0.27 avg=58.055s
+2026/06/06 01:25:31 MONITOR t=10740s progress 2770/3387 grpc_ok=2770 app_ok=2770 fail=0 rps=0.27 avg=58.025s
+2026/06/06 01:26:03 MONITOR t=10770s progress 2779/3387 grpc_ok=2779 app_ok=2779 fail=0 rps=0.27 avg=57.947s
+2026/06/06 01:26:34 MONITOR t=10800s progress 2787/3387 grpc_ok=2787 app_ok=2787 fail=0 rps=0.27 avg=57.949s
+2026/06/06 01:27:06 MONITOR t=10830s progress 2792/3387 grpc_ok=2792 app_ok=2792 fail=0 rps=0.27 avg=57.917s
+2026/06/06 01:27:37 MONITOR t=10860s progress 2801/3387 grpc_ok=2801 app_ok=2801 fail=0 rps=0.27 avg=57.869s
+2026/06/06 01:28:09 MONITOR t=10890s progress 2808/3387 grpc_ok=2808 app_ok=2808 fail=0 rps=0.27 avg=57.861s
+2026/06/06 01:28:41 MONITOR t=10920s progress 2817/3387 grpc_ok=2817 app_ok=2817 fail=0 rps=0.27 avg=57.938s
+2026/06/06 01:29:12 MONITOR t=10950s progress 2824/3387 grpc_ok=2824 app_ok=2824 fail=0 rps=0.27 avg=57.981s
+2026/06/06 01:29:44 MONITOR t=10980s progress 2834/3387 grpc_ok=2834 app_ok=2834 fail=0 rps=0.27 avg=58.007s
+2026/06/06 01:30:15 MONITOR t=11010s progress 2840/3387 grpc_ok=2840 app_ok=2840 fail=0 rps=0.27 avg=58.128s
+2026/06/06 01:30:47 MONITOR t=11040s progress 2845/3387 grpc_ok=2845 app_ok=2845 fail=0 rps=0.27 avg=58.102s
+2026/06/06 01:31:18 MONITOR t=11070s progress 2856/3387 grpc_ok=2856 app_ok=2856 fail=0 rps=0.27 avg=58.035s
+2026/06/06 01:31:50 MONITOR t=11100s progress 2862/3387 grpc_ok=2862 app_ok=2862 fail=0 rps=0.27 avg=58.054s
+2026/06/06 01:32:22 MONITOR t=11130s progress 2870/3387 grpc_ok=2870 app_ok=2870 fail=0 rps=0.27 avg=58.007s
+2026/06/06 01:32:53 MONITOR t=11160s progress 2878/3387 grpc_ok=2878 app_ok=2878 fail=0 rps=0.27 avg=57.94s
+2026/06/06 01:33:25 MONITOR t=11190s progress 2887/3387 grpc_ok=2887 app_ok=2887 fail=0 rps=0.27 avg=57.931s
+2026/06/06 01:33:56 MONITOR t=11220s progress 2892/3387 grpc_ok=2892 app_ok=2892 fail=0 rps=0.27 avg=57.905s
+2026/06/06 01:34:28 MONITOR t=11250s progress 2902/3387 grpc_ok=2902 app_ok=2902 fail=0 rps=0.27 avg=57.959s
+2026/06/06 01:35:00 MONITOR t=11280s progress 2907/3387 grpc_ok=2907 app_ok=2907 fail=0 rps=0.27 avg=58.018s
+2026/06/06 01:35:31 MONITOR t=11310s progress 2918/3387 grpc_ok=2918 app_ok=2918 fail=0 rps=0.27 avg=58.05s
+2026/06/06 01:36:03 MONITOR t=11340s progress 2925/3387 grpc_ok=2925 app_ok=2925 fail=0 rps=0.27 avg=57.998s
+2026/06/06 01:36:34 MONITOR t=11370s progress 2931/3387 grpc_ok=2931 app_ok=2931 fail=0 rps=0.27 avg=57.962s
+2026/06/06 01:37:06 MONITOR t=11400s progress 2940/3387 grpc_ok=2940 app_ok=2940 fail=0 rps=0.27 avg=58.093s
+2026/06/06 01:37:37 MONITOR t=11430s progress 2948/3387 grpc_ok=2948 app_ok=2948 fail=0 rps=0.27 avg=58.089s
+2026/06/06 01:38:09 MONITOR t=11460s progress 2956/3387 grpc_ok=2956 app_ok=2956 fail=0 rps=0.27 avg=58.041s
+2026/06/06 01:38:41 MONITOR t=11490s progress 2964/3387 grpc_ok=2964 app_ok=2964 fail=0 rps=0.27 avg=57.995s
+2026/06/06 01:39:12 MONITOR t=11520s progress 2971/3387 grpc_ok=2971 app_ok=2971 fail=0 rps=0.27 avg=57.942s
+2026/06/06 01:39:44 MONITOR t=11550s progress 2981/3387 grpc_ok=2981 app_ok=2981 fail=0 rps=0.27 avg=57.959s
+2026/06/06 01:40:15 MONITOR t=11580s progress 2986/3387 grpc_ok=2986 app_ok=2986 fail=0 rps=0.27 avg=58.003s
+2026/06/06 01:40:47 MONITOR t=11610s progress 2994/3387 grpc_ok=2994 app_ok=2994 fail=0 rps=0.27 avg=58.145s
+2026/06/06 01:41:18 MONITOR t=11640s progress 3001/3387 grpc_ok=3001 app_ok=3001 fail=0 rps=0.27 avg=58.105s
+2026/06/06 01:41:50 MONITOR t=11670s progress 3008/3387 grpc_ok=3008 app_ok=3008 fail=0 rps=0.27 avg=58.076s
+2026/06/06 01:42:22 MONITOR t=11700s progress 3014/3387 grpc_ok=3014 app_ok=3014 fail=0 rps=0.27 avg=58.038s
+2026/06/06 01:42:53 MONITOR t=11730s progress 3024/3387 grpc_ok=3024 app_ok=3024 fail=0 rps=0.27 avg=57.973s
+2026/06/06 01:43:25 MONITOR t=11760s progress 3032/3387 grpc_ok=3032 app_ok=3032 fail=0 rps=0.27 avg=57.927s
+2026/06/06 01:43:56 MONITOR t=11790s progress 3040/3387 grpc_ok=3040 app_ok=3040 fail=0 rps=0.27 avg=57.907s
+2026/06/06 01:44:28 MONITOR t=11820s progress 3049/3387 grpc_ok=3049 app_ok=3049 fail=0 rps=0.27 avg=57.896s
+2026/06/06 01:45:00 MONITOR t=11850s progress 3057/3387 grpc_ok=3057 app_ok=3057 fail=0 rps=0.27 avg=58.07s
+2026/06/06 01:45:31 MONITOR t=11880s progress 3063/3387 grpc_ok=3063 app_ok=3063 fail=0 rps=0.27 avg=58.111s
+2026/06/06 01:46:03 MONITOR t=11910s progress 3070/3387 grpc_ok=3070 app_ok=3070 fail=0 rps=0.27 avg=58.16s
+2026/06/06 01:46:34 MONITOR t=11940s progress 3078/3387 grpc_ok=3078 app_ok=3078 fail=0 rps=0.27 avg=58.127s
+2026/06/06 01:47:06 MONITOR t=11970s progress 3087/3387 grpc_ok=3087 app_ok=3087 fail=0 rps=0.27 avg=58.102s
+2026/06/06 01:47:37 MONITOR t=12000s progress 3095/3387 grpc_ok=3095 app_ok=3095 fail=0 rps=0.27 avg=58.044s
+2026/06/06 01:48:09 MONITOR t=12030s progress 3102/3387 grpc_ok=3102 app_ok=3102 fail=0 rps=0.27 avg=58.053s
+2026/06/06 01:48:41 MONITOR t=12060s progress 3110/3387 grpc_ok=3110 app_ok=3110 fail=0 rps=0.27 avg=57.997s
+2026/06/06 01:49:12 MONITOR t=12090s progress 3117/3387 grpc_ok=3117 app_ok=3117 fail=0 rps=0.27 avg=57.953s
+2026/06/06 01:49:44 MONITOR t=12120s progress 3128/3387 grpc_ok=3128 app_ok=3128 fail=0 rps=0.27 avg=57.968s
+2026/06/06 01:50:15 MONITOR t=12150s progress 3137/3387 grpc_ok=3137 app_ok=3137 fail=0 rps=0.27 avg=58.058s
+2026/06/06 01:50:47 MONITOR t=12180s progress 3144/3387 grpc_ok=3144 app_ok=3144 fail=0 rps=0.27 avg=58.026s
+2026/06/06 01:51:18 MONITOR t=12210s progress 3152/3387 grpc_ok=3152 app_ok=3152 fail=0 rps=0.27 avg=58.027s
+2026/06/06 01:51:50 MONITOR t=12240s progress 3159/3387 grpc_ok=3159 app_ok=3159 fail=0 rps=0.27 avg=57.983s
+2026/06/06 01:52:22 MONITOR t=12270s progress 3167/3387 grpc_ok=3167 app_ok=3167 fail=0 rps=0.27 avg=57.934s
+2026/06/06 01:52:53 MONITOR t=12300s progress 3175/3387 grpc_ok=3175 app_ok=3175 fail=0 rps=0.27 avg=57.996s
+2026/06/06 01:53:25 MONITOR t=12330s progress 3181/3387 grpc_ok=3181 app_ok=3181 fail=0 rps=0.27 avg=57.992s
+2026/06/06 01:53:56 MONITOR t=12360s progress 3190/3387 grpc_ok=3190 app_ok=3190 fail=0 rps=0.27 avg=57.941s
+2026/06/06 01:54:28 MONITOR t=12390s progress 3201/3387 grpc_ok=3201 app_ok=3201 fail=0 rps=0.27 avg=57.88s
+2026/06/06 01:55:00 MONITOR t=12420s progress 3206/3387 grpc_ok=3206 app_ok=3206 fail=0 rps=0.27 avg=57.96s
+2026/06/06 01:55:31 MONITOR t=12450s progress 3217/3387 grpc_ok=3217 app_ok=3217 fail=0 rps=0.27 avg=58.048s
+2026/06/06 01:56:03 MONITOR t=12480s progress 3221/3387 grpc_ok=3221 app_ok=3221 fail=0 rps=0.27 avg=58.032s
+2026/06/06 01:56:34 MONITOR t=12510s progress 3229/3387 grpc_ok=3229 app_ok=3229 fail=0 rps=0.27 avg=58.043s
+2026/06/06 01:57:06 MONITOR t=12540s progress 3236/3387 grpc_ok=3236 app_ok=3236 fail=0 rps=0.27 avg=57.998s
+2026/06/06 01:57:37 MONITOR t=12570s progress 3243/3387 grpc_ok=3243 app_ok=3243 fail=0 rps=0.27 avg=57.957s
+2026/06/06 01:58:09 MONITOR t=12600s progress 3252/3387 grpc_ok=3252 app_ok=3252 fail=0 rps=0.27 avg=57.898s
+2026/06/06 01:58:41 MONITOR t=12630s progress 3261/3387 grpc_ok=3261 app_ok=3261 fail=0 rps=0.27 avg=57.897s
+2026/06/06 01:59:12 MONITOR t=12660s progress 3272/3387 grpc_ok=3272 app_ok=3272 fail=0 rps=0.27 avg=57.854s
+2026/06/06 01:59:44 MONITOR t=12690s progress 3277/3387 grpc_ok=3277 app_ok=3277 fail=0 rps=0.27 avg=57.829s
+2026/06/06 02:00:15 MONITOR t=12720s progress 3287/3387 grpc_ok=3287 app_ok=3287 fail=0 rps=0.27 avg=57.905s
+2026/06/06 02:00:47 MONITOR t=12750s progress 3292/3387 grpc_ok=3292 app_ok=3292 fail=0 rps=0.27 avg=57.964s
+2026/06/06 02:01:18 MONITOR t=12780s progress 3301/3387 grpc_ok=3301 app_ok=3301 fail=0 rps=0.27 avg=58.031s
+2026/06/06 02:01:50 MONITOR t=12810s progress 3310/3387 grpc_ok=3310 app_ok=3310 fail=0 rps=0.27 avg=58s
+2026/06/06 02:02:22 MONITOR t=12840s progress 3319/3387 grpc_ok=3319 app_ok=3319 fail=0 rps=0.27 avg=58.028s
+2026/06/06 02:02:53 MONITOR t=12870s progress 3326/3387 grpc_ok=3326 app_ok=3326 fail=0 rps=0.27 avg=57.986s
+2026/06/06 02:03:25 MONITOR t=12900s progress 3334/3387 grpc_ok=3334 app_ok=3334 fail=0 rps=0.27 avg=57.945s
+2026/06/06 02:03:56 MONITOR t=12930s progress 3342/3387 grpc_ok=3342 app_ok=3342 fail=0 rps=0.27 avg=57.893s
+2026/06/06 02:04:28 MONITOR t=12960s progress 3349/3387 grpc_ok=3349 app_ok=3349 fail=0 rps=0.27 avg=57.839s
+2026/06/06 02:05:00 MONITOR t=12990s progress 3358/3387 grpc_ok=3358 app_ok=3358 fail=0 rps=0.27 avg=57.849s
+2026/06/06 02:05:31 MONITOR t=13020s progress 3368/3387 grpc_ok=3368 app_ok=3368 fail=0 rps=0.27 avg=57.967s
+2026/06/06 02:06:03 MONITOR t=13050s progress 3375/3387 grpc_ok=3375 app_ok=3375 fail=0 rps=0.27 avg=57.994s
+2026/06/06 02:06:34 FINAL t=13068s progress 3387/3387 grpc_ok=3387 app_ok=3387 fail=0 rps=0.28 avg=59.875s
+2026/06/06 02:07:06 
+2026/06/06 02:07:37 === RESULT ===
+2026/06/06 02:08:09 config: target=127.0.0.1:19090 c=16 payload=50.00MiB(52428798 bytes) memory_mode=no_arena filters=grayscale total=3387
+2026/06/06 02:08:41 duration: 3h35m12.418s
+2026/06/06 02:09:12 completed: 3387  grpc_ok: 3387  app_ok: 3387  fail: 0
+2026/06/06 02:09:44 rps: 0.259
+2026/06/06 02:10:15 latency avg: 59.875s
+2026/06/06 02:10:47 latency p50: 37.196s
+2026/06/06 02:11:18 latency p95: 4m1.466s
+2026/06/06 02:11:50 latency min: 6.539s
+2026/06/06 02:12:22 latency max: 7m50.698s
+[valgrind-remote] Остановка сервера (pid 9247), Valgrind пишет итог…
+[valgrind-remote] Отчёт: /root/streaming-system/valgrind-logs/VALGRIND_LOAD_etap1_no_arena.txt
+=== Valgrind + нагрузка (удалённый сервер) ===
+ubuntu-32gb-nbg1-1
+сценарий:    etap1
+memory_mode: no_arena
+duration:    30m
+total_req:   auto (arena=3387, no_arena=3800)
+
+--- LEAK SUMMARY ---
+==9247== 420 bytes in 1 blocks are possibly lost in loss record 264 of 300
+==9247== 457 bytes in 1 blocks are possibly lost in loss record 265 of 300
+==9247== 480 bytes in 1 blocks are possibly lost in loss record 266 of 300
+==9247== 439 bytes in 1 blocks are possibly lost in loss record 267 of 300
+==9247== 448 bytes in 1 blocks are possibly lost in loss record 268 of 300
+==9247== 407 bytes in 1 blocks are possibly lost in loss record 269 of 300
+==9247== 453 bytes in 1 blocks are possibly lost in loss record 270 of 300
+==9247== 491 bytes in 1 blocks are possibly lost in loss record 271 of 300
+==9247== 868 bytes in 2 blocks are possibly lost in loss record 279 of 300
+==9247== 2,122 bytes in 5 blocks are possibly lost in loss record 289 of 300
+==9247== 4,457 bytes in 10 blocks are possibly lost in loss record 294 of 300
+==9247== 4,606 bytes in 11 blocks are possibly lost in loss record 295 of 300
+==9247== 6,691 bytes in 16 blocks are possibly lost in loss record 298 of 300
+==9247==    definitely lost: 0 bytes in 1 blocks
+==9247==    indirectly lost: 0 bytes in 1 blocks
+==9247==      possibly lost: 22,287 bytes in 56 blocks
+==9247==    still reachable: 159,833 bytes in 474 blocks
+==9247== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
